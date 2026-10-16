@@ -137,41 +137,66 @@
       );
     }
 
-    // Base de Datos de Patologías (PES)
+    // BASE DE DATOS COMPLETA EXTRAÍDA DEL "DICCIONARIO PROHIBIDO DEL CUERPO"
     const BANCO_PES = [
       { id: 1, nombre: "Acné", organo: "Glándulas sebáceas de la piel", capa: "Ectodermo", conflicto: "Separación estética o desvalorización de la imagen.", fase: "Vagotónica (fase de reparación, con inflamación y pus)." },
-      { id: 2, nombre: "Adenoma", organo: "Glándulas (hipófisis, tiroides, etc.)", capa: "Endodermo / Mesodermo", conflicto: "No sentirse suficientemente capaz, rápido o apto.", fase: "Vagotónica (proliferación benigna en reparación)." },
+      { id: 2, nombre: "Adenoma", organo: "Glándulas (hipófisis, tiroides, etc.)", capa: "Mesodermo nuevo o Endodermo", conflicto: "No sentirse suficientemente capaz, rápido o apto.", fase: "Vagotónica (proliferación benigna en fase de reparación)." },
       { id: 3, nombre: "Afonía", organo: "Cuerdas vocales, laringe", capa: "Ectodermo", conflicto: "Miedo en el territorio o no poder expresarse.", fase: "Simpaticotónica o Vagotónica (inflamación/ronquera)." },
       { id: 4, nombre: "Alergia", organo: "Piel, mucosas, sistema inmune", capa: "Ectodermo", conflicto: "Separación o invasión del territorio.", fase: "Vagotónica (inflamación por contacto con el alérgeno)." },
-      { id: 5, nombre: "Amigdalitis", organo: "Amígdalas", capa: "Endodermo", conflicto: "No poder tragar una situación injusta, ofensa o humillación.", fase: "Vagotónica (dolor e inflamación al resolver)." },
+      { id: 5, nombre: "Amigdalitis", organo: "Amígdalas", capa: "Endodermo", conflicto: "No poder tragar una situación injusta, ofensa o humillación.", fase: "Vagotónica (dolor e inflamación al resolver el conflicto)." },
       { id: 6, nombre: "Anemia", organo: "Médula ósea roja", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda sobre uno mismo.", fase: "Simpaticotónica (reducción de glóbulos rojos)." },
       { id: 7, nombre: "Angina de pecho", organo: "Músculo cardíaco y arterias coronarias", capa: "Ectodermo / Mesodermo", conflicto: "Pérdida territorial o amenaza al territorio.", fase: "Simpaticotónica (dolor y constricción durante el conflicto)." },
       { id: 8, nombre: "Anorexia", organo: "Hipotálamo / sistema digestivo", capa: "Ectodermo / Endodermo", conflicto: "Deseo de control, rechazo materno o del crecimiento.", fase: "Simpaticotónica (falta de apetito, hipervigilancia)." },
       { id: 9, nombre: "Apendicitis", organo: "Apéndice (intestino grueso)", capa: "Endodermo", conflicto: "No poder evacuar una situación sucia o repugnante.", fase: "Vagotónica (inflamación aguda en reparación)." },
       { id: 10, nombre: "Asma", organo: "Bronquios", capa: "Ectodermo", conflicto: "Miedo en el territorio, opresión, falta de espacio.", fase: "Vagotónica (espasmos y dificultad para respirar)." },
-      { id: 11, nombre: "Bronquitis", organo: "Bronquios", capa: "Ectodermo", conflicto: "Conflicto de territorio o miedo a perderlo.", fase: "Vagotónica (inflamación de los bronquios)." },
-      { id: 12, nombre: "Bruxismo", organo: "Músculos mandibulares", capa: "Mesodermo Nuevo", conflicto: "Impotencia o rabia contenida, necesidad de control.", fase: "Simpaticotónica (tensión muscular prolongada)." },
-      { id: 13, nombre: "Cáncer de pulmón", organo: "Alvéolos pulmonares", capa: "Endodermo", conflicto: "Miedo a morir por asfixia o pérdida de espacio vital.", fase: "Simpaticotónica (proliferación celular)." },
-      { id: 14, nombre: "Cáncer de mama", organo: "Glándulas mamarias o conductos", capa: "Endodermo / Ectodermo", conflicto: "Preocupación por el nido o conflicto de separación.", fase: "Simpaticotónica o Vagotónica según tejido." },
-      { id: 15, nombre: "Colon Irritable", organo: "Colon / Intestino delgado", capa: "Endodermo", conflicto: "Conflicto de control emocional o experiencias indigeribles.", fase: "Fase oscilante por recaídas constantes." },
-      { id: 16, nombre: "Dermatitis", organo: "Piel (epidermis)", capa: "Ectodermo", conflicto: "Conflicto de separación o contacto no deseado.", fase: "Vagotónica (inflamación, picazón y enrojecimiento)." },
-      { id: 17, nombre: "Diabetes tipo 2", organo: "Páncreas y receptores celulares", capa: "Endodermo / Mesodermo", conflicto: "Resistencia al cambio, frustración o defensa frente al entorno.", fase: "Fase prolongada adaptativa." },
-      { id: 18, nombre: "Gastritis", organo: "Estómago", capa: "Endodermo", conflicto: "Situación indigesta, vivencia de injusticia o contrariedad.", fase: "Vagotónica (dolor e inflamación durante la curación)." },
-      { id: 19, nombre: "Herpes labial", organo: "Labios", capa: "Ectodermo", conflicto: "Conflicto de separación o contacto prohibido/desagradable.", fase: "Vagotónica (vesículas y dolor en reparación)." },
-      { id: 20, nombre: "Hipertensión arterial", organo: "Arterias / corazón", capa: "Mesodermo Nuevo", conflicto: "Conflicto de sobrecarga, resistencia o presión emocional.", fase: "Simpaticotónica (presión elevada adaptativa)." },
-      { id: 21, nombre: "Insomnio", organo: "Sistema nervioso central", capa: "Ectodermo", conflicto: "Hiperalerta, miedo nocturno o estado de peligro sostenido.", fase: "Simpaticotónica (imposibilidad de relajación)." },
-      { id: 22, nombre: "Migraña", organo: "Cerebro / vasos sanguíneos", capa: "Ectodermo", conflicto: "Conflicto de control, desvalorización intelectual o sobrecarga.", fase: "Vagotónica (congestión y dolor durante reparación)." },
-      { id: 23, nombre: "Psoriasis", organo: "Piel (epidermis)", capa: "Ectodermo", conflicto: "Doble conflicto de separación (querer y no querer contacto).", fase: "Fase activa y de reparación simultánea." },
-      { id: 24, nombre: "Rosácea", organo: "Piel del rostro", capa: "Ectodermo", conflicto: "Conflicto de vergüenza, exposición no deseada o ataque a la cara.", fase: "Vagotónica (enrojecimiento como reparación)." },
-      { id: 25, nombre: "Sinusitis", organo: "Senos paranasales", capa: "Endodermo", conflicto: "Presentimiento de peligro o situación que 'huele mal'.", fase: "Vagotónica (inflamación y congestión)." },
-      { id: 26, nombre: "Tendinitis", organo: "Tendones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por acción forzada o imposibilidad de ejecutar.", fase: "Vagotónica (inflamación dolorosa en curación)." },
-      { id: 27, nombre: "Tiroides (Hipotiroidismo)", organo: "Glándula Tiroides", capa: "Endodermo", conflicto: "Sentirse impotente ante la velocidad del tiempo; querer frenar.", fase: "Vagotónica (ralentización metabólica)." },
-      { id: 28, nombre: "Úlcera gástrica", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta territorial con rabia o rencor.", fase: "Simpaticotónica (ulceración activa)." },
-      { id: 29, nombre: "Várices", organo: "Venas", capa: "Mesodermo Nuevo", conflicto: "Sentirse atado a una situación, llevar una bola de hierro.", fase: "Vagotónica (dilatación venosa)." },
-      { id: 30, nombre: "Zona (Herpes Zóster)", organo: "Piel y nervios", capa: "Ectodermo", conflicto: "Separación brutal, contacto muy sucio o agresión en la zona.", fase: "Vagotónica (ampollas dolorosas en trayecto nervioso)." }
+      { id: 11, nombre: "Aneurisma", organo: "Arterias (pared vascular)", capa: "Mesodermo Nuevo", conflicto: "Desvalorización intensa relacionada con la circulación o función arterial.", fase: "Vagotónica (debilitamiento y dilatación)." },
+      { id: 12, nombre: "Arritmia", organo: "Nódulo sinusal / miocardio", capa: "Mesodermo nuevo / Ectodermo", conflicto: "Miedo en el territorio, susto inesperado, conflicto existencial.", fase: "Simpaticotónica (aceleración/alteración del ritmo)." },
+      { id: 13, nombre: "Artrosis", organo: "Cartílago y hueso articular", capa: "Mesodermo Nuevo", conflicto: "Desvalorización crónica respecto a la movilidad o función articular.", fase: "Vagotónica (reconstrucción lenta con rigidez)." },
+      { id: 14, nombre: "Artritis", organo: "Articulaciones (membrana sinovial)", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por falta de rendimiento, conflicto con movimiento.", fase: "Vagotónica (inflamación aguda en reparación)." },
+      { id: 15, nombre: "Bronquitis", organo: "Bronquios", capa: "Ectodermo", conflicto: "Conflicto de territorio o miedo a perderlo.", fase: "Vagotónica (inflamación de los bronquios)." },
+      { id: 16, nombre: "Bruxismo", organo: "Músculos mandibulares", capa: "Mesodermo Nuevo", conflicto: "Impotencia o rabia contenida, necesidad de control.", fase: "Simpaticotónica (tensión muscular prolongada)." },
+      { id: 17, nombre: "Bocio", organo: "Tiroides", capa: "Endodermo / Mesodermo nuevo", conflicto: "Sentirse lento o incapaz de actuar con rapidez.", fase: "Vagotónica (proliferación de tejido durante reparación)." },
+      { id: 18, nombre: "Bursitis", organo: "Bursa sinovial", capa: "Mesodermo Nuevo", conflicto: "Desvalorización motora localizada, sentirse incapaz en el movimiento.", fase: "Vagotónica (inflamación dolorosa en curación)." },
+      { id: 19, nombre: "Cáncer de pulmón", organo: "Alvéolos pulmonares", capa: "Endodermo", conflicto: "Miedo a morir por asfixia o pérdida de espacio vital.", fase: "Simpaticotónica (proliferación celular)." },
+      { id: 20, nombre: "Cáncer de mama", organo: "Glándulas mamarias o conductos", capa: "Endodermo / Ectodermo", conflicto: "Preocupación por el nido o conflicto de separación del hijo/pareja.", fase: "Simpaticotónica o Vagotónica según tejido." },
+      { id: 21, nombre: "Cáncer de colon", organo: "Colon", capa: "Endodermo", conflicto: "Conflicto de pérdida repugnante, sucia o indigerible.", fase: "Simpaticotónica (crecimiento celular)." },
+      { id: 22, nombre: "Cáncer de hígado", organo: "Hígado", capa: "Endodermo", conflicto: "Conflicto de carencia o miedo a morir de hambre.", fase: "Simpaticotónica (proliferación en fase activa)." },
+      { id: 23, nombre: "Cáncer de estómago", organo: "Estómago", capa: "Endodermo", conflicto: "Conflicto indigesto, no poder aceptar una situación o persona.", fase: "Simpaticotónica (proliferación gástrica)." },
+      { id: 24, nombre: "Cáncer de próstata", organo: "Próstata", capa: "Endodermo", conflicto: "Conflicto sexual o de pérdida de rol masculino.", fase: "Simpaticotónica (proliferación del epitelio prostático)." },
+      { id: 25, nombre: "Cataratas / Glaucoma", organo: "Cristalino / Nervio óptico", capa: "Ectodermo", conflicto: "Miedo visual, conflicto de no querer ver una amenaza o el futuro.", fase: "Simpaticotónica o Vagotónica según afectación." },
+      { id: 26, nombre: "Cefalea tensional / Migraña", organo: "Músculos del cráneo / Vasos cerebrales", capa: "Mesodermo nuevo / Ectodermo", conflicto: "Autoexigencia, control, desvalorización intelectual o sobrecarga.", fase: "Vagotónica (congestión y dolor durante reparación)." },
+      { id: 27, nombre: "Cistitis", organo: "Vejiga urinaria", capa: "Ectodermo", conflicto: "Conflicto territorial o invasión del espacio íntimo / marcaje.", fase: "Vagotónica (inflamación dolorosa durante curación)." },
+      { id: 28, nombre: "Colon Irritable / Colitis", organo: "Colon / Intestino delgado", capa: "Endodermo", conflicto: "Conflicto de control emocional, experiencias sucias o indigeribles.", fase: "Fase oscilante por recaídas constantes." },
+      { id: 29, nombre: "Dermatitis / Eczema", organo: "Piel (epidermis)", capa: "Ectodermo", conflicto: "Conflicto de separación o contacto no deseado / afectivo.", fase: "Vagotónica (inflamación, picazón y enrojecimiento)." },
+      { id: 30, nombre: "Diabetes tipo 1 y 2", organo: "Páncreas y receptores celulares", capa: "Endodermo / Mesodermo nuevo", conflicto: "Resistencia, oposición, defensa frente al entorno o frustración.", fase: "Fase adaptativa sostenida." },
+      { id: 31, nombre: "Depresión", organo: "Corteza cerebral / sistema límbico", capa: "Ectodermo", conflicto: "Sentimiento de pérdida profunda, culpa o desvalorización existencial.", fase: "Fase prolongada (inhibición emocional postconflicto)." },
+      { id: 32, nombre: "Endometriosis", organo: "Endometrio ectópico", capa: "Endodermo", conflicto: "Frustración con el territorio sexual o imposibilidad de armar el nido.", fase: "Vagotónica (proliferación celular)." },
+      { id: 33, nombre: "Esclerosis múltiple", organo: "Sistema nervioso central (mielina)", capa: "Ectodermo", conflicto: "Conflictos motores múltiples, desvalorización en el movimiento.", fase: "Simpaticotónica crónica (desmielinización)." },
+      { id: 34, nombre: "Esguince / Tendinitis", organo: "Ligamentos / Tendones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por acción forzada o imposibilidad de ejecutar.", fase: "Vagotónica (inflamación dolorosa al reparar)." },
+      { id: 35, nombre: "Gastritis / Úlcera gástrica", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta, vivencia de injusticia o rabia territorial.", fase: "Vagotónica (dolor e inflamación durante la curación)." },
+      { id: 36, nombre: "Gota", organo: "Articulaciones (dedos, pies)", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por no poder avanzar o actuar con decisión.", fase: "Vagotónica (depósito de cristales e inflamación)." },
+      { id: 37, nombre: "Hepatitis", organo: "Hígado", capa: "Endodermo", conflicto: "Conflicto de carencia, injusticia económica o traición familiar.", fase: "Vagotónica (inflamación hepática en curación)." },
+      { id: 38, nombre: "Herpes labial / genital", organo: "Labios / Genitales", capa: "Ectodermo", conflicto: "Separación o contacto prohibido, sucio o indeseado.", fase: "Vagotónica (vesículas y dolor en reparación)." },
+      { id: 39, nombre: "Hipertensión / Hipotensión", organo: "Arterias / Sistema circulatorio", capa: "Mesodermo Nuevo", conflicto: "Sobrecarga, resistencia activa o renuncia/derrota vital.", fase: "Simpaticotónica o Vagotónica según presión." },
+      { id: 40, nombre: "Hipertiroidismo / Hipotiroidismo", organo: "Glándula Tiroides", capa: "Endodermo", conflicto: "Impotencia ante la velocidad del tiempo; urgencia o deseo de frenar.", fase: "Simpaticotónica (hiper) o Vagotónica (hipo)." },
+      { id: 41, nombre: "Insomnio", organo: "Sistema nervioso central", capa: "Ectodermo", conflicto: "Hiperalerta, miedo nocturno o estado de peligro sostenido.", fase: "Simpaticotónica (imposibilidad de relajación)." },
+      { id: 42, nombre: "Infección urinaria / Otitis", organo: "Vejiga / Oído medio", capa: "Endodermo / Ectodermo", conflicto: "Invasión territorial o conflicto de no querer escuchar algo desagradable.", fase: "Vagotónica (inflamación y secreción)." },
+      { id: 43, nombre: "Leucemia / Linfoma", organo: "Médula ósea / Sistema linfático", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda sobre la propia identidad o ataque biológico.", fase: "Vagotónica (proliferación en fase de solución)." },
+      { id: 44, nombre: "Lumbalgia / Hernia discal", organo: "Columna vertebral lumbar / Discos", capa: "Mesodermo Nuevo", conflicto: "Desvalorización en el sostén o soporte económico/familiar.", fase: "Vagotónica (dolor agudo en reparación)." },
+      { id: 45, nombre: "Neumonía / Nefritis", organo: "Pulmones / Riñones", capa: "Endodermo / Mesodermo antiguo", conflicto: "Miedo a morir por asfixia o conflicto de abandono/desarraigo.", fase: "Vagotónica (reparación tisular con líquido/infección)." },
+      { id: 46, nombre: "Osteoporosis / Osteosarcoma", organo: "Huesos", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda estructural sobre la valía personal.", fase: "Simpaticotónica (pérdida ósea) / Vagotónica (reconstrucción)." },
+      { id: 47, nombre: "Parkinson", organo: "Sistema nervioso motor", capa: "Ectodermo / Mesodermo nuevo", conflicto: "Conflicto motor de querer moverse o frenar y no poder.", fase: "Simpaticotónica crónica (temblores y rigidez)." },
+      { id: 48, nombre: "Psoriasis", organo: "Piel (epidermis)", capa: "Ectodermo", conflicto: "Doble conflicto de separación (querer y no querer contacto simultáneamente).", fase: "Fase activa y de reparación alternada." },
+      { id: 49, nombre: "Rosácea", organo: "Piel del rostro", capa: "Ectodermo", conflicto: "Vergüenza, exposición no deseada o ataque a la propia imagen.", fase: "Vagotónica (enrojecimiento como reparación)." },
+      { id: 50, nombre: "Sinusitis", organo: "Senos paranasales", capa: "Endodermo", conflicto: "Presentimiento de peligro o situación que 'huele mal'.", fase: "Vagotónica (inflamación y congestión)." },
+      { id: 51, nombre: "Síndrome de Fatiga Crónica", organo: "Sistema nervioso y muscular", capa: "Ectodermo y Mesodermo nuevo", conflicto: "Agotamiento simbólico por sobreexigencia y desvalorización continua.", fase: "Vagotónica prolongada tras resolución parcial." },
+      { id: 52, nombre: "Tinnitus / Sordera", organo: "Oído interno", capa: "Ectodermo", conflicto: "Conflicto de sonido inesperado o no querer escuchar una verdad.", fase: "Crónica (percepción o pérdida adaptativa)." },
+      { id: 53, nombre: "Várices", organo: "Venas", capa: "Mesodermo Nuevo", conflicto: "Sentirse atado a una situación, llevar una bola de hierro o carga.", fase: "Vagotónica (dilatación venosa)." },
+      { id: 54, nombre: "Vitíligo", organo: "Piel (melanocitos)", capa: "Ectodermo", conflicto: "Conflicto de separación brutal, feo o traumático de alguien cercano.", fase: "Crónica (pérdida de pigmentación adaptativa)." },
+      { id: 55, nombre: "Zona (Herpes Zóster)", organo: "Piel y nervios periféricos", capa: "Ectodermo", conflicto: "Separación brutal, contacto muy sucio o agresión directa en la zona.", fase: "Vagotónica (ampollas dolorosas en trayecto nervioso)." }
     ];
 
-    // DATOS DE LAS 5 LEYES BIOLÓGICAS EN BIODESCODIFICACIÓN
+    // DATOS EDUCATIVOS DE LAS 5 LEYES BIOLÓGICAS
     const LEYES_BIOLOGICAS_DATOS = [
       {
         numero: "1ª LEY",
@@ -211,9 +236,10 @@
     ];
 
     function App() {
-      // Navegación: 'escaner' | 'diccionario' | 'leyes'
-      const [tab, setTab] = useState('escaner');
+      // PESTAÑAS EN ORDEN SOLICITADO: 'leyes' -> 'diccionario' -> 'escaner'
+      const [tab, setTab] = useState('leyes');
 
+      // Estado del Escáner
       const [paso, setPaso] = useState(1);
       const [sintoma, setSintoma] = useState('');
       const [tiempo, setTiempo] = useState('1 a 6 meses');
@@ -223,13 +249,15 @@
       const [repetitivo, setRepetitivo] = useState('Sí');
       const [compromiso, setCompromiso] = useState(8);
 
+      // Estado del Diccionario
       const [busqueda, setBusqueda] = useState('');
       const [capaFiltro, setCapaFiltro] = useState('TODAS');
       const [paginaActual, setPaginaActual] = useState(1);
-      const itemsPorPagina = 6;
+      const itemsPorPagina = 8;
 
       const PHONE_NUMBER = "56990229732";
 
+      // Persistencia
       useEffect(() => {
         const savedSintoma = localStorage.getItem('camino_sintoma');
         if (savedSintoma) setSintoma(savedSintoma);
@@ -297,11 +325,31 @@
             </a>
           </header>
 
-          {/* Navegación Principal de 3 Pestañas */}
+          {/* Navegación Principal en el orden exacto solicitado */}
           <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-xl mx-auto shadow-lg gap-1">
             <button
+              onClick={() => setTab('leyes')}
+              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+                tab === 'leyes'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>🧬</span> 5 Leyes Biológicas
+            </button>
+            <button
+              onClick={() => setTab('diccionario')}
+              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+                tab === 'diccionario'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>📖</span> Diccionario
+            </button>
+            <button
               onClick={() => setTab('escaner')}
-              className={`flex-1 min-w-[120px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'escaner'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -309,29 +357,170 @@
             >
               <span>✨</span> Escáner Bioemocional
             </button>
-            <button
-              onClick={() => setTab('diccionario')}
-              className={`flex-1 min-w-[120px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                tab === 'diccionario'
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <span>📖</span> Diccionario PES
-            </button>
-            <button
-              onClick={() => setTab('leyes')}
-              className={`flex-1 min-w-[120px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                tab === 'leyes'
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <span>🧬</span> Las 5 Leyes Biológicas
-            </button>
           </div>
 
-          {/* PESTAÑA 1: ESCÁNER BIOEMOCIONAL */}
+          {/* PESTAÑA 1: LAS 5 LEYES BIOLÓGICAS */}
+          {tab === 'leyes' && (
+            <div className="space-y-6">
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
+                <span className="text-xs font-bold tracking-widest text-amber-400/90 uppercase block">
+                  Fundamento Científico y Biológico
+                </span>
+                <h2 className="text-2xl font-cinzel font-bold text-amber-400">
+                  ¿Cómo Usamos las 5 Leyes Biológicas en Biodescodificación?
+                </h2>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Las 5 Leyes Biológicas demuestran que lo que llamamos "enfermedad" no es un error de la naturaleza ni una falla azarosa de tu cuerpo, sino un <strong className="text-amber-300">Programa Biológico Especial con Pleno Sentido Adaptativo</strong>. En nuestras sesiones privadas aplicamos estas leyes para descifrar el mensaje inconsciente de tu biología.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {LEYES_BIOLOGICAS_DATOS.map((ley, idx) => (
+                  <div key={idx} className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 rounded-2xl p-6 space-y-3 transition-all">
+                    <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                      <span className="text-xs font-bold uppercase px-3 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
+                        {ley.numero}
+                      </span>
+                      <span className="text-xs font-medium text-slate-500">
+                        Ley Biológica #{idx + 1}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-amber-400">{ley.titulo}</h3>
+                      <p className="text-xs font-semibold text-slate-300 mt-0.5">{ley.subtitulo}</p>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-300 italic bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/60 leading-relaxed">
+                      "{ley.enunciado}"
+                    </p>
+
+                    <div className="pt-2">
+                      <strong className="text-xs font-bold text-amber-400/90 uppercase tracking-wider block mb-1">
+                        👉 Aplicación Práctica en la Sesión:
+                      </strong>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        {ley.aplicacion}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-950 border border-amber-500/30 rounded-2xl p-6 sm:p-8 text-center space-y-4 shadow-xl">
+                <h3 className="text-xl font-cinzel font-bold text-amber-400">
+                  Comprender la Lógica de Tu Cuerpo es el Primer Paso para Sanar
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+                  Al entender la Ley Biológica que sostiene tu síntoma, el miedo al diagnóstico desaparece y puedes iniciar un proceso profundo de transformación.
+                </p>
+                <div className="pt-2">
+                  <button
+                    onClick={() => setTab('escaner')}
+                    className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-all"
+                  >
+                    Escanear Mi Síntoma Ahora →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PESTAÑA 2: DICCIONARIO COMPLETO (A-Z) */}
+          {tab === 'diccionario' && (
+            <div className="space-y-6">
+              
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 backdrop-blur-sm">
+                <div>
+                  <input
+                    type="text"
+                    value={busqueda}
+                    onChange={(e) => { setBusqueda(e.target.value); setPaginaActual(1); }}
+                    placeholder="Buscar entre patologías del libro (ej: Cáncer, Gastritis, Piel, Diabetes)..."
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-slate-100 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {['TODAS', 'Endodermo', 'Mesodermo', 'Ectodermo'].map((capa) => (
+                    <button
+                      key={capa}
+                      onClick={() => { setCapaFiltro(capa); setPaginaActual(1); }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        capaFiltro === capa
+                          ? 'bg-amber-500 text-slate-950'
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      }`}
+                    >
+                      {capa}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {itemsPaginados.map((item) => (
+                  <div key={item.id} className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-bold text-amber-400">{item.nombre}</h3>
+                        <span className="text-[10px] uppercase font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded-md">
+                          {item.capa}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-slate-400">
+                        <strong className="text-slate-300">Órgano:</strong> {item.organo}
+                      </p>
+
+                      <p className="text-sm text-slate-200 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+                        <strong className="text-amber-400/90 block mb-1 text-xs uppercase tracking-wider">Conflicto Psicológico:</strong>
+                        {item.conflicto}
+                      </p>
+
+                      <p className="text-xs text-slate-400">
+                        <strong className="text-slate-300">Fase del Síntoma:</strong> {item.fase}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 mt-2 border-t border-slate-800/80">
+                      <button
+                        onClick={() => evaluarEnEscaner(item.nombre)}
+                        className="w-full py-2.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2"
+                      >
+                        Evaluar en Escáner Bioemocional →
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {totalPaginas > 1 && (
+                <div className="flex justify-center items-center gap-2 pt-6">
+                  <button
+                    disabled={paginaActual === 1}
+                    onClick={() => setPaginaActual(p => Math.max(p - 1, 1))}
+                    className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold disabled:opacity-40"
+                  >
+                    Anterior
+                  </button>
+                  <span className="text-xs text-slate-400 px-3">
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
+                  <button
+                    disabled={paginaActual === totalPaginas}
+                    onClick={() => setPaginaActual(p => Math.min(p + 1, totalPaginas))}
+                    className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold disabled:opacity-40"
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* PESTAÑA 3: ESCÁNER BIOEMOCIONAL */}
           {tab === 'escaner' && (
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
               
@@ -560,169 +749,6 @@
                   </button>
                 </div>
               )}
-
-            </div>
-          )}
-
-          {/* PESTAÑA 2: DICCIONARIO PES */}
-          {tab === 'diccionario' && (
-            <div className="space-y-6">
-              
-              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 backdrop-blur-sm">
-                <div>
-                  <input
-                    type="text"
-                    value={busqueda}
-                    onChange={(e) => { setBusqueda(e.target.value); setPaginaActual(1); }}
-                    placeholder="Buscar por síntoma, órgano o conflicto (ej: Colon, Miedo, Piel)..."
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-slate-100 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {['TODAS', 'Endodermo', 'Mesodermo', 'Ectodermo'].map((capa) => (
-                    <button
-                      key={capa}
-                      onClick={() => { setCapaFiltro(capa); setPaginaActual(1); }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                        capaFiltro === capa
-                          ? 'bg-amber-500 text-slate-950'
-                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-                      }`}
-                    >
-                      {capa}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {itemsPaginados.map((item) => (
-                  <div key={item.id} className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-start">
-                        <h3 className="text-lg font-bold text-amber-400">{item.nombre}</h3>
-                        <span className="text-[10px] uppercase font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded-md">
-                          {item.capa}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-slate-400">
-                        <strong className="text-slate-300">Órgano:</strong> {item.organo}
-                      </p>
-
-                      <p className="text-sm text-slate-200 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
-                        <strong className="text-amber-400/90 block mb-1 text-xs uppercase tracking-wider">Conflicto Psicológico:</strong>
-                        {item.conflicto}
-                      </p>
-
-                      <p className="text-xs text-slate-400">
-                        <strong className="text-slate-300">Fase del Síntoma:</strong> {item.fase}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 mt-2 border-t border-slate-800/80">
-                      <button
-                        onClick={() => evaluarEnEscaner(item.nombre)}
-                        className="w-full py-2.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2"
-                      >
-                        Evaluar en Escáner Bioemocional →
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {totalPaginas > 1 && (
-                <div className="flex justify-center items-center gap-2 pt-6">
-                  <button
-                    disabled={paginaActual === 1}
-                    onClick={() => setPaginaActual(p => Math.max(p - 1, 1))}
-                    className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold disabled:opacity-40"
-                  >
-                    Anterior
-                  </button>
-                  <span className="text-xs text-slate-400 px-3">
-                    Página {paginaActual} de {totalPaginas}
-                  </span>
-                  <button
-                    disabled={paginaActual === totalPaginas}
-                    onClick={() => setPaginaActual(p => Math.min(p + 1, totalPaginas))}
-                    className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold disabled:opacity-40"
-                  >
-                    Siguiente
-                  </button>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {/* PESTAÑA 3: LAS 5 LEYES BIOLÓGICAS Y SU APLICACIÓN */}
-          {tab === 'leyes' && (
-            <div className="space-y-6">
-              
-              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
-                <span className="text-xs font-bold tracking-widest text-amber-400/90 uppercase block">
-                  Fundamento Científico y Biológico
-                </span>
-                <h2 className="text-2xl font-cinzel font-bold text-amber-400">
-                  ¿Cómo Usamos las 5 Leyes Biológicas en Biodescodificación?
-                </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Las 5 Leyes Biológicas demuestran que lo que llamamos "enfermedad" no es un error de la naturaleza ni una falla azarosa de tu cuerpo, sino un <strong className="text-amber-300">Programa Biológico Especial con Pleno Sentido Adaptativo</strong>. En nuestras sesiones privadas aplicamos estas leyes para descifrar el mensaje inconsciente de tu biología.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {LEYES_BIOLOGICAS_DATOS.map((ley, idx) => (
-                  <div key={idx} className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 rounded-2xl p-6 space-y-3 transition-all">
-                    <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-                      <span className="text-xs font-bold uppercase px-3 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                        {ley.numero}
-                      </span>
-                      <span className="text-xs font-medium text-slate-500">
-                        Ley Biológica #{idx + 1}
-                      </span>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-bold text-amber-400">{ley.titulo}</h3>
-                      <p className="text-xs font-semibold text-slate-300 mt-0.5">{ley.subtitulo}</p>
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-slate-300 italic bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/60 leading-relaxed">
-                      "{ley.enunciado}"
-                    </p>
-
-                    <div className="pt-2">
-                      <strong className="text-xs font-bold text-amber-400/90 uppercase tracking-wider block mb-1">
-                        👉 Aplicación Práctica en la Sesión:
-                      </strong>
-                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        {ley.aplicacion}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-slate-950 border border-amber-500/30 rounded-2xl p-6 sm:p-8 text-center space-y-4 shadow-xl">
-                <h3 className="text-xl font-cinzel font-bold text-amber-400">
-                  Comprender la Lógica de Tu Cuerpo es el Primer Paso para Sanar
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-                  Al entender la Ley Biológica que sostiene tu síntoma, el miedo al diagnóstico desaparece y puedes iniciar un proceso profundo de transformación.
-                </p>
-                <div className="pt-2">
-                  <button
-                    onClick={() => setTab('escaner')}
-                    className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-all"
-                  >
-                    Escanear Mi Síntoma Ahora →
-                  </button>
-                </div>
-              </div>
 
             </div>
           )}
