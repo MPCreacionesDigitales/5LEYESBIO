@@ -260,7 +260,7 @@
       { id: 112, nombre: "Dismenorrea", organo: "Útero", capa: "Mesodermo Nuevo", conflicto: "Conflicto sexual o rechazo a la feminidad.", fase: "Vagotónica (dolor menstrual en reparación)." },
       { id: 113, nombre: "Dispepsia", organo: "Estómago", capa: "Endodermo", conflicto: "Situación simbólica indigerible, humillación o asco.", fase: "Simpaticotónica (hipersecreción y molestia)." },
       { id: 114, nombre: "Distimia", organo: "Sistema límbico", capa: "Ectodermo", conflicto: "Tristeza crónica, baja autoestima y falta de sentido.", fase: "Fase prolongada post-conflicto." },
-      { id: 115, nombre: "Distrofia muscular", organo: "Músculo esquelético", capa: "Mesodermo Nuevo", conflicto: "Desvalorización muscular crónica o incapacidad simbólica.", fase: "Simpaticotónica prolongada (degeneración)." },
+      { id: 115, nombre: "Distrofia muscular", organo: "Músculos esqueléticos", capa: "Mesodermo Nuevo", conflicto: "Desvalorización muscular crónica o incapacidad simbólica.", fase: "Simpaticotónica prolongada (degeneración)." },
       { id: 116, nombre: "Disuria", organo: "Uretra", capa: "Ectodermo", conflicto: "Marcaje de territorio o trauma sexual.", fase: "Vagotónica (dolor al orinar en reparación)." },
       { id: 117, nombre: "Dolor de cabeza", organo: "Vasos cerebrales / nervioso", capa: "Ectodermo", conflicto: "Sobrecarga mental, miedo, presión o culpa.", fase: "Vagotónica (señal de reparación del sistema nervioso)." },
       { id: 118, nombre: "Dolor de espalda", organo: "Columna / músculos", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por falta de apoyo o carga excesiva.", fase: "Vagotónica (dolor en fase de reparación)." },
@@ -742,7 +742,7 @@
     ];
 
     function App() {
-      // PESTAÑAS EN EL ORDEN SOLICITADO: 'leyes' -> 'diccionario' -> 'escaner'
+      // PESTAÑAS: 'leyes' -> 'diccionario' -> 'escaner'
       const [tab, setTab] = useState('leyes');
 
       // Estado del Escáner
@@ -762,6 +762,7 @@
       const itemsPorPagina = 10;
 
       const PHONE_NUMBER = "56990229732";
+      const WEBSITE_URL = "https://caminoalinconsciente.cl/";
 
       // Persistencia en LocalStorage
       useEffect(() => {
@@ -827,43 +828,51 @@
           
           {/* Header con el Logo Oficial */}
           <header className="mb-8 flex flex-col items-center">
-            <a href="https://caminoalinconsciente.cl/" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-105">
+            <a href={WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-105">
               <CaminoLogo className="w-full max-w-md" />
             </a>
           </header>
 
-          {/* Navegación Principal */}
-          <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-xl mx-auto shadow-lg gap-1">
+          {/* Navegación Principal con el nuevo Botón al Sitio Web al FINAL */}
+          <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-2xl mx-auto shadow-lg gap-1">
             <button
               onClick={() => setTab('leyes')}
-              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'leyes'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>🧬</span> 5 Leyes Biológicas
+              <span>🧬</span> 5 Leyes
             </button>
             <button
               onClick={() => setTab('diccionario')}
-              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'diccionario'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>📖</span> Diccionario ({BANCO_PES.length})
+              <span>📖</span> Diccionario
             </button>
             <button
               onClick={() => setTab('escaner')}
-              className={`flex-1 min-w-[130px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'escaner'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>✨</span> Escáner Bioemocional
+              <span>✨</span> Escáner
             </button>
+            <a
+              href={WEBSITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 border border-slate-700/80 shadow-md"
+            >
+              <span>🌐</span> Sitio Web
+            </a>
           </div>
 
           {/* PESTAÑA 1: LAS 5 LEYES BIOLÓGICAS */}
@@ -1260,12 +1269,12 @@
                     </button>
 
                     <a
-                      href="https://caminoalinconsciente.cl/"
+                      href={WEBSITE_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 border border-slate-700"
                     >
-                      <span>🔗</span> Ir a Camino Al Inconsciente
+                      <span>🌐</span> Ir a Camino Al Inconsciente
                     </a>
                   </div>
 
