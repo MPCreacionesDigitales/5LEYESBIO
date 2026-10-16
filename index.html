@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Interactiva de Biodescodificación | Camino Al Inconsciente</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fbfbfe',
+              100: '#f0f3fa',
+              200: '#dce4f3',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#0f172a',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 w-full h-auto min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    // --- BASE DE DATOS EXTRAÍDA DEL DOCUMENTO DICCIONARIO PROHIBIDO DEL CUERPO ---
+    const BANCO_SINTOMAS = [
+      { id: 1, nombre: "Acné", organo: "Glándulas sebáceas de la piel", capa: "Ectodermo", conflicto: "Separación estética o desvalorización de la propia imagen.", fase: "Vagotónica (Fase de reparación con inflamación)." },
+      { id: 2, nombre: "Afonía", organo: "Cuerdas vocales / Laringe", capa: "Ectodermo", conflicto: "Miedo en el territorio o impotencia para expresarse.", fase: "Simpaticotónica o Reparación." },
+      { id: 3, nombre: "Amigdalitis", organo: "Amígdalas", capa: "Endodermo", conflicto: "No poder atrapar o tragar un 'bocado' (situación/ofensa).", fase: "Vagotónica (Dolor e inflamación al resolver el conflicto)." },
+      { id: 4, nombre: "Anemia", organo: "Médula ósea roja", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda respecto a uno mismo o la familia.", fase: "Simpaticotónica (Disminución de glóbulos rojos)." },
+      { id: 5, nombre: "Apendicitis", organo: "Apéndice", capa: "Endodermo", conflicto: "Conflicto de no poder evacuar una marranada o situación sucia.", fase: "Vagotónica (Inflamación aguda)." },
+      { id: 6, nombre: "Asma", organo: "Bronquios / Laringe", capa: "Ectodermo", conflicto: "Miedo o amenaza en el territorio, falta de aire o espacio.", fase: "Vagotónica (Espasmos respiratorios)." },
+      { id: 7, nombre: "Bruxismo", organo: "Músculos de la mandíbula", capa: "Mesodermo Nuevo", conflicto: "Rabia o impotencia contenida, necesidad no expresada de morder/apretar.", fase: "Simpaticotónica (Tensión muscular)." },
+      { id: 8, nombre: "Colon Irritable", organo: "Colon", capa: "Endodermo", conflicto: "Experiencia indigerible o conflicto de contrariedad familiar sucia.", fase: "Oscilante (Recaídas constantes)." },
+      { id: 9, nombre: "Dermatitis", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Conflicto de separación o pérdida de contacto querido/deseado.", fase: "Vagotónica (Enrojecimiento y picazón)." },
+      { id: 10, nombre: "Gastritis", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta con rabia o vivencia de injusticia.", fase: "Vagotónica (Dolor e inflamación)." },
+      { id: 11, nombre: "Hipertensión", organo: "Arterias / Sistema circulatorio", capa: "Mesodermo Nuevo", conflicto: "Sobrecarga emocional, resistencia activa o presión continua.", fase: "Simpaticotónica (Presión elevada)." },
+      { id: 12, nombre: "Migraña", organo: "Vasos sanguíneos / Encéfalo", capa: "Ectodermo", conflicto: "Desvalorización intelectual, sobrecarga mental o control obsesivo.", fase: "Vagotónica (Vasodilatación y dolor en reparación)." },
+      { id: 13, nombre: "Tendinitis", organo: "Tendones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización en la acción, imposibilidad de ejecutar o sujetar.", fase: "Vagotónica (Inflamación y dolor)." },
+      { id: 14, nombre: "Tiroides (Hipotiroidismo)", organo: "Glándula Tiroides", capa: "Endodermo", conflicto: "Impotencia ante el tiempo; querer frenar el tiempo o sentirse lento.", fase: "Vagotónica (Ralentización)." }
+    ];
+
+    const COSMOVISIONES = [
+      {
+        id: "mecanicista",
+        titulo: "1. Cosmovisión Mecanicista",
+        sub: "El cuerpo como una máquina",
+        desc: "Visualiza el cuerpo como un ensamblaje de piezas. Si falla algo, se repara o elimina. Separa la mente de la biología y considera al síntoma como un error accidental.",
+        pregunta: "¿Qué tengo?",
+        limite: "Fragmenta a la persona y la convierte en un receptor pasivo."
+      },
+      {
+        id: "genetica",
+        titulo: "2. Genética Determinista",
+        sub: "Destino biológico inmutable",
+        desc: "Sostiene que el síntoma está programado en el ADN. La epigenética moderna ha demostrado que los genes se activan o desactivan según el entorno y la percepción.",
+        pregunta: "¿Qué heredé?",
+        limite: "Genera resignación y quita capacidad de transformación."
+      },
+      {
+        id: "victima",
+        titulo: "3. Cosmovisión Víctima",
+        sub: "El cuerpo me ataca",
+        desc: "Considera la enfermedad como un castigo o mala suerte. Mantener esta postura sostiene el sistema simpático activo por el miedo sostenido.",
+        pregunta: "¿Por qué me pasó esto a mí?",
+        limite: "Aumenta la impotencia y el estrés biológico."
+      },
+      {
+        id: "responsabilidad",
+        titulo: "4. Responsabilidad Biológica",
+        sub: "Coherencia y sentido adaptativo",
+        desc: "Propone que el cuerpo responde a un impacto emocional no resuelto. El síntoma no es un error, sino un programa especial con sentido de supervivencia.",
+        pregunta: "¿Qué conflicto activó este programa?",
+        limite: "Abre la puerta a la conciencia, desarmando el miedo."
+      }
+    ];
+
+    const LEYES_BIOLOGICAS = [
+      { num: "1ª", titulo: "Ley de Hierro", desc: "Todo programa biológico especial inicia con un impacto emocional inesperado (Bioshock), vivido en aislamiento y sin solución inmediata." },
+      { num: "2ª", titulo: "Carácter Bifásico", desc: "Todo proceso tiene dos fases si se resuelve el conflicto: Fase Activa (Simpaticotonía) y Fase de Reparación (Vagotónica)." },
+      { num: "3ª", titulo: "Sistema Ontogenético", desc: "Cada tejido del cuerpo responde según su capa embrionaria de origen (Endodermo, Mesodermo, Ectodermo)." },
+      { num: "4ª", titulo: "Sistema de Microbios", desc: "Los microbios no atacan; son aliados optimizadores que trabajan exclusivamente en la fase de reparación según la capa embrionaria." },
+      { num: "5ª", titulo: "Quintaesencia", desc: "Cada enfermedad tiene un sentido biológico adaptativo. El cuerpo nunca se equivoca." }
+    ];
+
+    function App() {
+      const [seccion, setSeccion] = useState('diccionario');
+      const [busqueda, setBusqueda] = useState('');
+      const [capaFiltro, setCapaFiltro] = useState('TODAS');
+      const [cosmovisionActiva, setCosmovisionActiva] = useState('responsabilidad');
+      const [sintomaSeleccionado, setSintomaSeleccionado] = useState(null);
+
+      const PHONE_NUMBER = "56990229732";
+
+      // Filtrado del Diccionario
+      const sintomasFiltrados = useMemo(() => {
+        return BANCO_SINTOMAS.filter(item => {
+          const coincideTexto = item.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+                                item.conflicto.toLowerCase().includes(busqueda.toLowerCase()) ||
+                                item.organo.toLowerCase().includes(busqueda.toLowerCase());
+          const coincideCapa = capaFiltro === 'TODAS' || item.capa.toLowerCase().includes(capaFiltro.toLowerCase());
+          return coincideTexto && coincideCapa;
+        });
+      }, [busqueda, capaFiltro]);
+
+      // Enviar consulta directa
+      const consultarSintoma = (sintoma) => {
+        const text = `Hola Mario, estuve leyendo la Biblioteca de Biodescodificación en tu portal. Tengo interés en profundizar sobre el síntoma: *${sintoma.nombre}* (${sintoma.conflicto}). ¿Cómo puedo agendar una sesión 1 a 1 contigo?`;
+        window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+      };
+
+      return (
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          
+          {/* HEADER PRINCIPAL */}
+          <header className="text-center mb-8 bg-slate-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
+            <div className="relative z-10">
+              <span className="text-amber-400 font-cinzel text-xs tracking-[0.3em] uppercase block mb-2">
+                Camino Al Inconsciente
+              </span>
+              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-3">
+                Biblioteca Interactiva de Biodescodificación
+              </h1>
+              <p className="text-slate-300 text-sm max-w-2xl mx-auto font-light leading-relaxed">
+                Basado en el <strong className="text-amber-300 font-semibold">Diccionario Prohibido del Cuerpo</strong>. Descubre el sentido biológico y emocional detrás de cada síntoma.
+              </p>
+            </div>
+          </header>
+
+          {/* MENU DE NAVEGACIÓN */}
+          <nav className="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
+            {[
+              { id: 'diccionario', label: '📖 Diccionario A-Z' },
+              { id: 'cosmovision', label: '👁️ Las 4 Cosmovisiones' },
+              { id: 'leyes', label: '🧬 5 Leyes Biológicas' },
+              { id: 'guia', label: '💡 Cómo Leer Tu Cuerpo' }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setSeccion(tab.id)}
+                className={`px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 ${
+                  seccion === tab.id
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* NAVEGACIÓN DE CONTENIDO */}
+
+          {/* SECCIÓN 1: DICCIONARIO A-Z */}
+          {seccion === 'diccionario' && (
+            <div className="space-y-6">
+              
+              {/* Buscador & Filtros */}
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                    placeholder="Buscar síntoma, conflicto u órgano (ej: Gastritis, Piel, Rabia)..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                  />
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-xs font-semibold text-slate-400 mr-2 uppercase">Capa Embrionaria:</span>
+                  {['TODAS', 'Endodermo', 'Mesodermo', 'Ectodermo'].map(capa => (
+                    <button
+                      key={capa}
+                      onClick={() => setCapaFiltro(capa)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        capaFiltro === capa
+                          ? 'bg-slate-900 text-amber-400 font-bold'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      {capa}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grid de Tarjetas */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sintomasFiltrados.map(item => (
+                  <div 
+                    key={item.id}
+                    className="bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-5 shadow-sm transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-bold text-slate-900">{item.nombre}</h3>
+                        <span className="text-[10px] uppercase font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md">
+                          {item.capa}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-slate-500 mb-3">
+                        <strong className="text-slate-700">Órgano Afectado:</strong> {item.organo}
+                      </p>
+
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 mb-3">
+                        <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block mb-1">
+                          Conflicto Biológico Asociado:
+                        </span>
+                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                          {item.conflicto}
+                        </p>
+                      </div>
+
+                      <p className="text-xs text-slate-500">
+                        <strong className="text-slate-700">Fase Típica:</strong> {item.fase}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 mt-3 border-t border-slate-100">
+                      <button
+                        onClick={() => consultarSintoma(item)}
+                        className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2"
+                      >
+                        <span>💬</span> Consultar sobre este síntoma con Mario
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          )}
+
+          {/* SECCIÓN 2: LAS 4 COSMOVISIONES */}
+          {seccion === 'cosmovision' && (
+            <div className="space-y-6">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                <h2 className="text-xl font-bold text-slate-900 mb-2">
+                  La Mirada que Eliges Define Tu Destino
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+                  Dos personas pueden recibir el mismo diagnóstico. Una entra en pánico; la otra entra en conciencia. ¿Qué cambió? La forma de mirar.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {COSMOVISIONES.map(item => (
+                  <div
+                    key={item.id}
+                    onClick={() => setCosmovisionActiva(item.id)}
+                    className={`p-5 rounded-2xl border cursor-pointer transition-all ${
+                      cosmovisionActiva === item.id
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-lg'
+                        : 'bg-white text-slate-800 border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className={`text-[10px] font-bold uppercase tracking-widest block mb-1 ${cosmovisionActiva === item.id ? 'text-amber-400' : 'text-blue-600'}`}>
+                      {item.sub}
+                    </span>
+                    <h3 className="text-lg font-bold mb-2">{item.titulo}</h3>
+                    <p className={`text-xs leading-relaxed mb-4 ${cosmovisionActiva === item.id ? 'text-slate-300' : 'text-slate-600'}`}>
+                      {item.desc}
+                    </p>
+
+                    <div className={`p-3 rounded-xl text-xs font-medium ${cosmovisionActiva === item.id ? 'bg-slate-800 text-amber-300' : 'bg-slate-50 text-slate-700'}`}>
+                      <strong className="block mb-0.5">Pregunta Central:</strong> "{item.pregunta}"
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* SECCIÓN 3: 5 LEYES BIOLÓGICAS */}
+          {seccion === 'leyes' && (
+            <div className="space-y-4">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center mb-6">
+                <h2 className="text-xl font-bold text-slate-900 mb-2">
+                  Las 5 Leyes Biológicas del Dr. Ryke Geerd Hamer
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+                  El pilar científico de la Biodescodificación. Muestra cómo cada enfermedad responde a un programa especial con pleno sentido de supervivencia.
+                </p>
+              </div>
+
+              {LEYES_BIOLOGICAS.map((ley, idx) => (
+                <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-lg shrink-0">
+                    {ley.num}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 mb-1">{ley.titulo}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {ley.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* SECCIÓN 4: GUÍA PRÁCTICA */}
+          {seccion === 'guia' && (
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="text-center max-w-xl mx-auto">
+                <h2 className="text-xl font-bold text-slate-900 mb-2">
+                  Cómo Usar Este Conocimiento Sin Juzgarte
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600">
+                  El error más común es leer un conflicto y culpabilizarse. Nadie elige enfermarse conscientemente.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">1</span>
+                  <h3 className="font-bold text-sm text-slate-900 mb-2">Lee Sin Juicio</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    No te castigues ni busques culpables. Comprender es para liberar, no para responsabilizar negativamente.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">2</span>
+                  <h3 className="font-bold text-sm text-slate-900 mb-2">Busca el Momento</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    ¿Cuándo comenzó exactamente el síntoma? ¿Qué evento imprevisto o emoción no expresada viviste días antes?
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">3</span>
+                  <h3 className="font-bold text-sm text-slate-900 mb-2">Observa la Fase</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Muchos dolores aparecen en fase de reparación (Vagotónica). A veces el dolor indica que tu cuerpo ya está sanando.
+                  </p>
+                </div>
+              </div>
+
+              {/* CALL TO ACTION FINAL */}
+              <div className="bg-slate-900 text-white rounded-2xl p-6 text-center mt-8 space-y-4">
+                <h3 className="text-lg font-bold text-amber-400">
+                  ¿Deseas profundizar en tu propio síntoma o historia personal?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
+                  Agenda una sesión privada 1 a 1 de Biodescodificación con Mario Paredes para encontrar la raíz biológica y transformar tu vida.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                  <a
+                    href={`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent('Hola Mario, leí la guía en tu portal y me gustaría agendar una sesión 1 a 1 contigo.')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
+                  >
+                    💬 Agendar por WhatsApp (+56 9 9022 9732)
+                  </a>
+                  <a
+                    href="https://caminoalinconsciente.cl/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs border border-slate-700 transition-all"
+                  >
+                    🔗 Visitar caminoalinconsciente.cl
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* FOOTER */}
+          <footer className="mt-12 text-center text-xs text-slate-400 border-t border-slate-200 pt-6">
+            <p>© {new Date().getFullYear()} Camino Al Inconsciente - Mario Paredes.</p>
+            <p className="mt-1 font-light">
+              La biodescodificación complementa el acompañamiento médico sin reemplazarlo.
+            </p>
+          </footer>
+
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
