@@ -59,10 +59,10 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect } = React;
 
-    // BANCO COMPLETO DE PATOLOGÍAS (MÁS DE 500 ENFERMEDADES A-Z)
+    // BANCO COMPLETO DE PATOLOGÍAS (A-Z)
     const BANCO_PES_COMPLETO = [
       { id: 1, nombre: "Acné", organo: "Glándulas sebáceas de la piel", capa: "Ectodermo", conflicto: "Separación estética o desvalorización de la propia imagen.", fase: "Vagotónica (Fase de reparación con inflamación)." },
-      { id: 2, nombre: "Adenoma de tiroides", organo: "Glándula tiroides", capa: "Endodermo", conflicto: "Impaciencia, conflicto de tiempo: querer atrapa el bocado rápidamente.", fase: "Simpaticotónica (Crecimiento celular)." },
+      { id: 2, nombre: "Adenoma de tiroides", organo: "Glándula tiroides", capa: "Endodermo", conflicto: "Impaciencia, conflicto de tiempo: querer atrapar el bocado rápidamente.", fase: "Simpaticotónica (Crecimiento celular)." },
       { id: 3, nombre: "Afonía", organo: "Cuerdas vocales / Laringe", capa: "Ectodermo", conflicto: "Miedo en el territorio o imposibilidad de expresarse o emitir un sonido.", fase: "Simpaticotónica o Vagotónica (Inflamación)." },
       { id: 4, nombre: "Alergia cutánea", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Pérdida de contacto con un ser querido o contacto no deseado con un alérgeno.", fase: "Vagotónica (Enrojecimiento y picazón)." },
       { id: 5, nombre: "Alzheimer", organo: "Corteza cerebral", capa: "Ectodermo", conflicto: "Deseo de olvidar un trauma doloroso o huir de una realidad insoportable.", fase: "Conflicto activo sostenido." },
@@ -89,7 +89,7 @@
       { id: 26, nombre: "Colon irritable", organo: "Colon", capa: "Endodermo", conflicto: "Contrariedad indigesta recurrente o tensión emocional sostenida.", fase: "Fase oscilante por recaídas." },
       { id: 27, nombre: "Dermatitis", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Pérdida de contacto querido o separación no deseada.", fase: "Vagotónica (Inflamación y picazón)." },
       { id: 28, nombre: "Diabetes Tipo 2", organo: "Células alfa/beta del páncreas", capa: "Ectodermo", conflicto: "Resistencia activa, defenderse de algo desagradable o repugnancia.", fase: "Fase activa prolongada." },
-      { id: 29, nombre: "Escansión / Esclerosis múltiple", organo: "Vaina de mielina", capa: "Ectodermo", conflicto: "Imposibilidad de huir o avanzar, sentimiento de estar atrapado.", fase: "Fase de reparación con pérdida motora." },
+      { id: 29, nombre: "Esclerosis múltiple", organo: "Vaina de mielina", capa: "Ectodermo", conflicto: "Imposibilidad de huir o avanzar, sentimiento de estar atrapado.", fase: "Fase de reparación con pérdida motora." },
       { id: 30, nombre: "Gastritis", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta con rabia o vivencia de injusticia.", fase: "Vagotónica (Dolor e inflamación)." },
       { id: 31, nombre: "Glaucoma", organo: "Cuerpo vítreo / Presión ocular", capa: "Ectodermo", conflicto: "Miedo a la espalda o presión por no ver el peligro a tiempo.", fase: "Simpaticotónica / Vagotónica." },
       { id: 32, nombre: "Gota", organo: "Túbulos renales / Articulaciones", capa: "Endodermo / Mesodermo", conflicto: "Sentirse solo, abandonado o en peligro financiero grave.", fase: "Acumulación de ácido úrico." },
@@ -113,9 +113,48 @@
       { id: 50, nombre: "Várices", organo: "Venas de las piernas", capa: "Mesodermo Nuevo", conflicto: "Sentirse atado a un lugar o llevar una pesada bola de hierro.", fase: "Vagotónica (Dilatación venosa)." }
     ];
 
+    // DATOS DE LAS 5 LEYES BIOLÓGICAS APLICADAS EN BIODESCODIFICACIÓN
+    const LEYES_BIOLOGICAS_APLICADAS = [
+      {
+        numero: "1ª Ley",
+        titulo: "La Ley de Hierro de la Biología",
+        sub: "El Origen: El Impacto Emocional (Bioshock)",
+        enunciado: "Todo Programa Biológico Especial (DHS) inicia con un choque traumático inesperado, vivido en soledad y sin solución inmediata.",
+        aplicacion: "En consulta, no buscamos el estrés común del día a día, sino el instante preciso del 'Bioshock': un evento imprevisto que tomó por sorpresa al sistema nervioso. Identificar este momento exacto es la clave para desbloquear la carga emocional retenida."
+      },
+      {
+        numero: "2ª Ley",
+        titulo: "La Ley del Carácter Bifásico de los Programas Biológicos",
+        sub: "Las Dos Fases: Conflicto Activo y Reparación",
+        enunciado: "Todo proceso biológico consta de dos fases (siempre que se resuelva el conflicto): Fase Simpaticotónica (Conflicto Activo) y Fase Vagotónica (Solución/Reparación).",
+        aplicacion: "Explicamos al consultante en qué fase se encuentra su síntoma. Muchos dolores, inflamaciones o fiebres no son el problema, sino la 'Fase de Reparación' (Vagotónica) donde el cuerpo está sanando. Esto reduce drásticamente el pánico y el miedo al diagnóstico."
+      },
+      {
+        numero: "3ª Ley",
+        titulo: "El Sistema Ontogenético de los Programas Biológicos",
+        sub: "El Código de los Tejidos y Capas Embrionarias",
+        enunciado: "Cada órgano y tejido del cuerpo pertenece a una capa embrionaria (Endodermo, Mesodermo o Ectodermo) regulada por un área específica del cerebro.",
+        aplicacion: "Nos permite saber exactamente qué tipo de vivencia inconsciente afectó al cuerpo. Por ejemplo: el Endodermo responde a conflictos de 'supervivencia o bocado', el Mesodermo a 'desvalorización' y el Ectodermo a 'separación o territorio'."
+      },
+      {
+        numero: "4ª Ley",
+        titulo: "El Sistema Ontogenético de los Microbios",
+        sub: "Microbios como Aliados de la Biología",
+        enunciado: "Bacterias, hongos y virus no atacan el cuerpo de forma destructiva; actúan como optimizadores ecológicos dirigidos por el cerebro durante la fase de solución.",
+        aplicacion: "Ayuda a cambiar la cosmovisión del consultante: deja de ver a los microorganismos como 'enemigos a combatir' y comprende su papel activo en la limpieza y restauración del tejido afectado durante la fase de curación."
+      },
+      {
+        numero: "5ª Ley",
+        titulo: "La Quintaesencia (La Ley de la Comprensión Biológica)",
+        sub: "El Sentido Biológico del Síntoma",
+        enunciado: "Toda enfermedad es un Programa Biológico Especial con Pleno Sentido Adaptativo creado por la naturaleza para garantizar la supervivencia.",
+        aplicacion: "Es la piedra angular de nuestro acompañamiento: comprender que el cuerpo NUNCA se equivoca. El síntoma es una respuesta inteligente para adaptarse a una emoción no digerida o no expresada."
+      }
+    ];
+
     function App() {
-      // Navegación principal
-      const [tab, setTab] = useState('escaner'); // 'escaner' | 'diccionario' | 'metodo'
+      // Navegación principal: 'escaner' | 'diccionario' | 'metodo' | 'leyes'
+      const [tab, setTab] = useState('escaner');
 
       // Estados del Escáner
       const [paso, setPaso] = useState(1);
@@ -137,12 +176,12 @@
 
       // Persistencia local
       useEffect(() => {
-        const savedSintoma = localStorage.getItem('camino_sintoma_v2');
+        const savedSintoma = localStorage.getItem('camino_sintoma_v3');
         if (savedSintoma) setSintoma(savedSintoma);
       }, []);
 
       useEffect(() => {
-        localStorage.setItem('camino_sintoma_v2', sintoma);
+        localStorage.setItem('camino_sintoma_v3', sintoma);
       }, [sintoma]);
 
       // Cálculo del Índice de Receptividad
@@ -180,7 +219,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      // WhatsApp URL Generator
+      // Generator WhatsApp
       const enviarWhatsApp = () => {
         const text = `*FICHA DE ESCÁNER BIOEMOCIONAL - CAMINO AL INCONSCIENTE*%0A%0A` +
           `*1. Síntoma / Diagnóstico:* ${sintoma || 'No especificado'}%0A` +
@@ -217,10 +256,10 @@
           </header>
 
           {/* BARRA DE PESTAÑAS PRINCIPAL */}
-          <nav className="flex justify-center mb-8 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm max-w-2xl mx-auto">
+          <nav className="flex flex-wrap justify-center mb-8 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto gap-1">
             <button
               onClick={() => setTab('escaner')}
-              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+              className={`flex-1 min-w-[140px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
                 tab === 'escaner'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                   : 'text-slate-600 hover:bg-slate-50'
@@ -231,24 +270,35 @@
 
             <button
               onClick={() => setTab('diccionario')}
-              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+              className={`flex-1 min-w-[140px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
                 tab === 'diccionario'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                   : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <span>📖</span> Diccionario PES (A-Z)
+              <span>📖</span> Diccionario PES
+            </button>
+
+            <button
+              onClick={() => setTab('leyes')}
+              className={`flex-1 min-w-[140px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
+                tab === 'leyes'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span>🧬</span> Las 5 Leyes Biológicas
             </button>
 
             <button
               onClick={() => setTab('metodo')}
-              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+              className={`flex-1 min-w-[140px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
                 tab === 'metodo'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                   : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <span>🌱</span> Método & Sesión 1 a 1
+              <span>🌱</span> Método & Sesión
             </button>
           </nav>
 
@@ -589,7 +639,79 @@
             </div>
           )}
 
-          {/* PESTAÑA 3: MÉTODO & SESIÓN 1 A 1 (INFORMACIÓN DEL SITIO WEB) */}
+          {/* PESTAÑA 3: LAS 5 LEYES BIOLÓGICAS Y SU APLICACIÓN */}
+          {tab === 'leyes' && (
+            <div className="space-y-6">
+              
+              {/* INTRODUCCIÓN A LAS LEYES BIOLÓGICAS */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
+                <span className="text-xs font-bold tracking-widest text-blue-600 uppercase block">
+                  Fundamento Científico y Biológico
+                </span>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                  ¿Cómo Usamos las 5 Leyes Biológicas en Biodescodificación?
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Las 5 Leyes Biológicas nos muestran que la enfermedad no es un fallo del organismo ni un castigo, sino un <strong className="text-slate-900">Programa Biológico Especial con Pleno Sentido Adaptativo</strong>. En nuestro método de acompañamiento, utilizamos este modelo biológico para comprender el código exacto que activó la respuesta de tu cuerpo.
+                </p>
+              </div>
+
+              {/* LISTADO INTERACTIVO DE LAS LEYES */}
+              <div className="space-y-4">
+                {LEYES_BIOLOGICAS_APLICADAS.map((ley, index) => (
+                  <div key={index} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold uppercase px-3 py-1 bg-blue-50 text-blue-700 rounded-lg border border-blue-100">
+                        {ley.numero}
+                      </span>
+                      <span className="text-[11px] font-medium text-slate-400">
+                        Ley Biológica #{index + 1}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900">{ley.titulo}</h3>
+                      <p className="text-xs font-bold text-blue-600 mt-0.5">{ley.sub}</p>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-700 italic bg-slate-50 p-3.5 rounded-2xl border border-slate-100 leading-relaxed">
+                      "{ley.enunciado}"
+                    </p>
+
+                    <div className="pt-2">
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block mb-1">
+                        👉 Aplicación Práctica en la Sesión:
+                      </span>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {ley.aplicacion}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* LLAMADO A LA ACCIÓN DESDE LAS LEYES */}
+              <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm text-center space-y-4">
+                <h3 className="text-lg sm:text-xl font-bold text-white">
+                  Comprender la Lógica de Tu Cuerpo es el Primer Paso para Sanar
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+                  Cuando dejas de pelear con el síntoma y comprendes la Ley Biológica que lo sostiene, el miedo desaparece y recuperas tu capacidad de respuesta.
+                </p>
+                <div className="pt-2">
+                  <button
+                    onClick={() => setTab('escaner')}
+                    className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition-all"
+                  >
+                    Escanear Mi Síntoma Ahora →
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* PESTAÑA 4: MÉTODO & SESIÓN 1 A 1 (INFORMACIÓN DEL SITIO WEB) */}
           {tab === 'metodo' && (
             <div className="space-y-6">
               
@@ -602,7 +724,7 @@
                   Trabajamos sobre situaciones CON DIAGNÓSTICO
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  En biodescodificación no adivinamos ni diagnosticamos. Partimos de una mirada integrativa: la persona acude con un <strong className="text-slate-900">diagnóstico médico o clínico previo</strong>. A partir de allí, profundizamos en qué experiencias, emociones, creencias y aprendizajes inconscientes se asocian con la manera en que estás viviendo ese conflicto[cite: 5].
+                  En biodescodificación no adivinamos ni diagnosticamos. Partimos de una mirada integrativa: la persona acude con un <strong className="text-slate-900">diagnóstico médico o clínico previo</strong>[cite: 5, 20]. A partir de allí, profundizamos en qué experiencias, emociones, creencias y aprendizajes inconscientes se asocian con la manera en que estás viviendo ese conflicto[cite: 5].
                 </p>
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 leading-relaxed">
                   💡 <strong className="text-slate-900">Importante:</strong> La biodescodificación no reemplaza el tratamiento médico o psicológico; lo amplía y complementa al comprender la raíz biológica y emocional de lo que experimentas[cite: 6, 20].
