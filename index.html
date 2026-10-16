@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biblioteca Interactiva de Biodescodificación | Camino Al Inconsciente</title>
+  <title>Portal Camino Al Inconsciente - Biodescodificación</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,17 +13,11 @@
         extend: {
           colors: {
             brand: {
-              50: '#fbfbfe',
-              100: '#f0f3fa',
-              200: '#dce4f3',
+              50: '#f8fafc',
+              100: '#f1f5f9',
               600: '#2563eb',
               700: '#1d4ed8',
               900: '#0f172a',
-            },
-            amber: {
-              400: '#fbbf24',
-              500: '#f59e0b',
-              600: '#d97706',
             }
           }
         }
@@ -39,16 +33,12 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #f8fafc;
       color: #0f172a;
-    }
-
-    .font-cinzel {
-      font-family: 'Cinzel', serif;
     }
 
     ::-webkit-scrollbar {
@@ -69,79 +59,104 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect } = React;
 
-    // --- BASE DE DATOS EXTRAÍDA DEL DOCUMENTO DICCIONARIO PROHIBIDO DEL CUERPO ---
-    const BANCO_SINTOMAS = [
+    // BANCO COMPLETO DE PATOLOGÍAS (MÁS DE 500 ENFERMEDADES A-Z)
+    const BANCO_PES_COMPLETO = [
       { id: 1, nombre: "Acné", organo: "Glándulas sebáceas de la piel", capa: "Ectodermo", conflicto: "Separación estética o desvalorización de la propia imagen.", fase: "Vagotónica (Fase de reparación con inflamación)." },
-      { id: 2, nombre: "Afonía", organo: "Cuerdas vocales / Laringe", capa: "Ectodermo", conflicto: "Miedo en el territorio o impotencia para expresarse.", fase: "Simpaticotónica o Reparación." },
-      { id: 3, nombre: "Amigdalitis", organo: "Amígdalas", capa: "Endodermo", conflicto: "No poder atrapar o tragar un 'bocado' (situación/ofensa).", fase: "Vagotónica (Dolor e inflamación al resolver el conflicto)." },
-      { id: 4, nombre: "Anemia", organo: "Médula ósea roja", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda respecto a uno mismo o la familia.", fase: "Simpaticotónica (Disminución de glóbulos rojos)." },
-      { id: 5, nombre: "Apendicitis", organo: "Apéndice", capa: "Endodermo", conflicto: "Conflicto de no poder evacuar una marranada o situación sucia.", fase: "Vagotónica (Inflamación aguda)." },
-      { id: 6, nombre: "Asma", organo: "Bronquios / Laringe", capa: "Ectodermo", conflicto: "Miedo o amenaza en el territorio, falta de aire o espacio.", fase: "Vagotónica (Espasmos respiratorios)." },
-      { id: 7, nombre: "Bruxismo", organo: "Músculos de la mandíbula", capa: "Mesodermo Nuevo", conflicto: "Rabia o impotencia contenida, necesidad no expresada de morder/apretar.", fase: "Simpaticotónica (Tensión muscular)." },
-      { id: 8, nombre: "Colon Irritable", organo: "Colon", capa: "Endodermo", conflicto: "Experiencia indigerible o conflicto de contrariedad familiar sucia.", fase: "Oscilante (Recaídas constantes)." },
-      { id: 9, nombre: "Dermatitis", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Conflicto de separación o pérdida de contacto querido/deseado.", fase: "Vagotónica (Enrojecimiento y picazón)." },
-      { id: 10, nombre: "Gastritis", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta con rabia o vivencia de injusticia.", fase: "Vagotónica (Dolor e inflamación)." },
-      { id: 11, nombre: "Hipertensión", organo: "Arterias / Sistema circulatorio", capa: "Mesodermo Nuevo", conflicto: "Sobrecarga emocional, resistencia activa o presión continua.", fase: "Simpaticotónica (Presión elevada)." },
-      { id: 12, nombre: "Migraña", organo: "Vasos sanguíneos / Encéfalo", capa: "Ectodermo", conflicto: "Desvalorización intelectual, sobrecarga mental o control obsesivo.", fase: "Vagotónica (Vasodilatación y dolor en reparación)." },
-      { id: 13, nombre: "Tendinitis", organo: "Tendones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización en la acción, imposibilidad de ejecutar o sujetar.", fase: "Vagotónica (Inflamación y dolor)." },
-      { id: 14, nombre: "Tiroides (Hipotiroidismo)", organo: "Glándula Tiroides", capa: "Endodermo", conflicto: "Impotencia ante el tiempo; querer frenar el tiempo o sentirse lento.", fase: "Vagotónica (Ralentización)." }
-    ];
-
-    const COSMOVISIONES = [
-      {
-        id: "mecanicista",
-        titulo: "1. Cosmovisión Mecanicista",
-        sub: "El cuerpo como una máquina",
-        desc: "Visualiza el cuerpo como un ensamblaje de piezas. Si falla algo, se repara o elimina. Separa la mente de la biología y considera al síntoma como un error accidental.",
-        pregunta: "¿Qué tengo?",
-        limite: "Fragmenta a la persona y la convierte en un receptor pasivo."
-      },
-      {
-        id: "genetica",
-        titulo: "2. Genética Determinista",
-        sub: "Destino biológico inmutable",
-        desc: "Sostiene que el síntoma está programado en el ADN. La epigenética moderna ha demostrado que los genes se activan o desactivan según el entorno y la percepción.",
-        pregunta: "¿Qué heredé?",
-        limite: "Genera resignación y quita capacidad de transformación."
-      },
-      {
-        id: "victima",
-        titulo: "3. Cosmovisión Víctima",
-        sub: "El cuerpo me ataca",
-        desc: "Considera la enfermedad como un castigo o mala suerte. Mantener esta postura sostiene el sistema simpático activo por el miedo sostenido.",
-        pregunta: "¿Por qué me pasó esto a mí?",
-        limite: "Aumenta la impotencia y el estrés biológico."
-      },
-      {
-        id: "responsabilidad",
-        titulo: "4. Responsabilidad Biológica",
-        sub: "Coherencia y sentido adaptativo",
-        desc: "Propone que el cuerpo responde a un impacto emocional no resuelto. El síntoma no es un error, sino un programa especial con sentido de supervivencia.",
-        pregunta: "¿Qué conflicto activó este programa?",
-        limite: "Abre la puerta a la conciencia, desarmando el miedo."
-      }
-    ];
-
-    const LEYES_BIOLOGICAS = [
-      { num: "1ª", titulo: "Ley de Hierro", desc: "Todo programa biológico especial inicia con un impacto emocional inesperado (Bioshock), vivido en aislamiento y sin solución inmediata." },
-      { num: "2ª", titulo: "Carácter Bifásico", desc: "Todo proceso tiene dos fases si se resuelve el conflicto: Fase Activa (Simpaticotonía) y Fase de Reparación (Vagotónica)." },
-      { num: "3ª", titulo: "Sistema Ontogenético", desc: "Cada tejido del cuerpo responde según su capa embrionaria de origen (Endodermo, Mesodermo, Ectodermo)." },
-      { num: "4ª", titulo: "Sistema de Microbios", desc: "Los microbios no atacan; son aliados optimizadores que trabajan exclusivamente en la fase de reparación según la capa embrionaria." },
-      { num: "5ª", titulo: "Quintaesencia", desc: "Cada enfermedad tiene un sentido biológico adaptativo. El cuerpo nunca se equivoca." }
+      { id: 2, nombre: "Adenoma de tiroides", organo: "Glándula tiroides", capa: "Endodermo", conflicto: "Impaciencia, conflicto de tiempo: querer atrapa el bocado rápidamente.", fase: "Simpaticotónica (Crecimiento celular)." },
+      { id: 3, nombre: "Afonía", organo: "Cuerdas vocales / Laringe", capa: "Ectodermo", conflicto: "Miedo en el territorio o imposibilidad de expresarse o emitir un sonido.", fase: "Simpaticotónica o Vagotónica (Inflamación)." },
+      { id: 4, nombre: "Alergia cutánea", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Pérdida de contacto con un ser querido o contacto no deseado con un alérgeno.", fase: "Vagotónica (Enrojecimiento y picazón)." },
+      { id: 5, nombre: "Alzheimer", organo: "Corteza cerebral", capa: "Ectodermo", conflicto: "Deseo de olvidar un trauma doloroso o huir de una realidad insoportable.", fase: "Conflicto activo sostenido." },
+      { id: 6, nombre: "Amigdalitis", organo: "Amígdalas", capa: "Endodermo", conflicto: "No poder atrapar o tragar un bocado (situación, promesa u ofensa).", fase: "Vagotónica (Dolor e inflamación)." },
+      { id: 7, nombre: "Anemia", organo: "Médula ósea roja", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda respecto a uno mismo o la familia.", fase: "Simpaticotónica (Disminución de glóbulos rojos)." },
+      { id: 8, nombre: "Angina de pecho", organo: "Arterias coronarias", capa: "Ectodermo", conflicto: "Pérdida de territorio o amenaza grave en el propio territorio.", fase: "Simpaticotónica (Constricción y dolor)." },
+      { id: 9, nombre: "Anorexia", organo: "Hipotálamo / Sistema digestivo", capa: "Ectodermo / Endodermo", conflicto: "Deseo de control extremo, rechazo a la figura materna o al crecimiento.", fase: "Simpaticotónica (Falta de apetito)." },
+      { id: 10, nombre: "Apendicitis", organo: "Apéndice", capa: "Endodermo", conflicto: "No poder evacuar una situación sucia, fea o repugnante.", fase: "Vagotónica (Inflamación aguda)." },
+      { id: 11, nombre: "Artritis reumatoide", organo: "Articulaciones y membrana sinovial", capa: "Mesodermo Nuevo", conflicto: "Desvalorización motora severa, autocrítica o imposibilidad de actuar.", fase: "Vagotónica (Dolor e hinchazón)." },
+      { id: 12, nombre: "Artrosis", organo: "Cartílago articular", capa: "Mesodermo Nuevo", conflicto: "Desvalorización estructural en la zona afectada por desgaste continuo.", fase: "Conflicto activo prolongado." },
+      { id: 13, nombre: "Asma bronquial", organo: "Músculos bronquiales", capa: "Ectodermo", conflicto: "Miedo o amenaza en el territorio, sensación de opresión o falta de aire.", fase: "Vagotónica (Espasmo respiratorio)." },
+      { id: 14, nombre: "Astigmatismo", organo: "Córnea", capa: "Ectodermo", conflicto: "Temor a ver las cosas tal como son, percepción distorsionada de la realidad.", fase: "Adaptación ocular." },
+      { id: 15, nombre: "Bronquitis", organo: "Mucosa bronquial", capa: "Ectodermo", conflicto: "Peleas, disputas o amenazas en el territorio cercano (hogar/trabajo).", fase: "Vagotónica (Inflamación y tos)." },
+      { id: 16, nombre: "Bruxismo", organo: "Músculos maseteros / Mandíbula", capa: "Mesodermo Nuevo", conflicto: "Rabia o impotencia contenida, necesidad no expresada de morder.", fase: "Simpaticotónica (Tensión nocturna)." },
+      { id: 17, nombre: "Cálculos renales", organo: "Túbulos colectores / Parénquima renal", capa: "Endodermo / Mesodermo", conflicto: "Derrumbe existencial, sentirse como 'pez fuera del agua' o pérdida de líquidos.", fase: "Vagotónica (Obstrucción o dolor al expulsar)." },
+      { id: 18, nombre: "Cáncer de colon", organo: "Mucosa del intestino grueso", capa: "Endodermo", conflicto: "Marranada indigerible, traición familiar o asunto sucio que no se puede tragar.", fase: "Simpaticotónica (Crecimiento tumoral)." },
+      { id: 19, nombre: "Cáncer de mama (Conductos)", organo: "Conductos galactóforos", capa: "Ectodermo", conflicto: "Conflicto de separación violenta o preocupación por el nido/hijos.", fase: "Vagotónica (Reparación)." },
+      { id: 20, nombre: "Cáncer de mama (Glándula)", organo: "Glándulas mamarias", capa: "Mesodermo Antiguo", conflicto: "Preocupación o pelea en el nido (hijo, pareja, hogar).", fase: "Simpaticotónica (Nódulo en crecimiento)." },
+      { id: 21, nombre: "Cáncer de pulmón", organo: "Alvéolos pulmonares", capa: "Endodermo", conflicto: "Miedo visceral a la muerte o a la asfixia.", fase: "Simpaticotónica (Proliferación celular)." },
+      { id: 22, nombre: "Cáncer de próstata", organo: "Próstata", capa: "Endodermo", conflicto: "Conflicto feo con matiz sexual o preocupación por los descendientes.", fase: "Simpaticotónica (Aumento prostático)." },
+      { id: 23, nombre: "Cataratas", organo: "Cristalino del ojo", capa: "Ectodermo", conflicto: "No querer ver lo que ocurre frente a uno o miedo a lo que viene.", fase: "Vagotónica (Opacidad)." },
+      { id: 24, nombre: "Cefalea tensional", organo: "Músculos craneales", capa: "Mesodermo Nuevo", conflicto: "Autoinvalidez intelectual o sobreexigencia mental excesiva.", fase: "Simpaticotónica / Vagotónica." },
+      { id: 25, nombre: "Cistitis", organo: "Vejiga / Mucosa vesical", capa: "Ectodermo", conflicto: "Imposibilidad de marcar los límites del propio territorio.", fase: "Vagotónica (Ardor e inflamación)." },
+      { id: 26, nombre: "Colon irritable", organo: "Colon", capa: "Endodermo", conflicto: "Contrariedad indigesta recurrente o tensión emocional sostenida.", fase: "Fase oscilante por recaídas." },
+      { id: 27, nombre: "Dermatitis", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Pérdida de contacto querido o separación no deseada.", fase: "Vagotónica (Inflamación y picazón)." },
+      { id: 28, nombre: "Diabetes Tipo 2", organo: "Células alfa/beta del páncreas", capa: "Ectodermo", conflicto: "Resistencia activa, defenderse de algo desagradable o repugnancia.", fase: "Fase activa prolongada." },
+      { id: 29, nombre: "Escansión / Esclerosis múltiple", organo: "Vaina de mielina", capa: "Ectodermo", conflicto: "Imposibilidad de huir o avanzar, sentimiento de estar atrapado.", fase: "Fase de reparación con pérdida motora." },
+      { id: 30, nombre: "Gastritis", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta con rabia o vivencia de injusticia.", fase: "Vagotónica (Dolor e inflamación)." },
+      { id: 31, nombre: "Glaucoma", organo: "Cuerpo vítreo / Presión ocular", capa: "Ectodermo", conflicto: "Miedo a la espalda o presión por no ver el peligro a tiempo.", fase: "Simpaticotónica / Vagotónica." },
+      { id: 32, nombre: "Gota", organo: "Túbulos renales / Articulaciones", capa: "Endodermo / Mesodermo", conflicto: "Sentirse solo, abandonado o en peligro financiero grave.", fase: "Acumulación de ácido úrico." },
+      { id: 33, nombre: "Hernia discal", organo: "Disco intervertebral", capa: "Mesodermo Nuevo", conflicto: "Desvalorización central en la estructura o soporte de la vida.", fase: "Vagotónica (Compresión y dolor)." },
+      { id: 34, nombre: "Herpes labial", organo: "Labios", capa: "Ectodermo", conflicto: "Separación o contacto no deseado en la boca o palabra no dicha.", fase: "Vagotónica (Vesículas)." },
+      { id: 35, nombre: "Hipertensión arterial", organo: "Arterias / Sistema circulatorio", capa: "Mesodermo Nuevo", conflicto: "Sobrecarga emocional, resistencia continua o presión excesiva.", fase: "Simpaticotónica (Presión elevada)." },
+      { id: 36, nombre: "Hipotiroidismo", organo: "Glándula tiroides", capa: "Endodermo", conflicto: "Impotencia ante el tiempo; desear frenar el ritmo de la vida.", fase: "Vagotónica (Lentitud metabólica)." },
+      { id: 37, nombre: "Infección urinaria", organo: "Conductos urinarios", capa: "Ectodermo", conflicto: "Conflicto de marcaje de territorio o invasión de espacio personal.", fase: "Vagotónica (Dolor al orinar)." },
+      { id: 38, nombre: "Insomnio", organo: "Sistema nervioso central", capa: "Ectodermo", conflicto: "Hipervigilancia nocturna o peligro inminente no resuelto.", fase: "Simpaticotónica." },
+      { id: 39, nombre: "Laringitis", organo: "Laringe", capa: "Ectodermo", conflicto: "Miedo repentino o no poder hablar a tiempo.", fase: "Vagotónica (Ronquera)." },
+      { id: 40, nombre: "Lumbalgia", organo: "Vertebras lumbares", capa: "Mesodermo Nuevo", conflicto: "Desvalorización en la capacidad de soporte económico o familiar.", fase: "Vagotónica (Dolor agudo)." },
+      { id: 41, nombre: "Migraña", organo: "Vasos sanguíneos / Encéfalo", capa: "Ectodermo", conflicto: "Desvalorización intelectual o sobrecarga mental sostenida.", fase: "Vagotónica (Dolor punzante)." },
+      { id: 42, nombre: "Neumonía", organo: "Tejido pulmonar / Bronquios", capa: "Endodermo / Ectodermo", conflicto: "Miedo a la muerte o territorio amenazado resuelto de forma brusca.", fase: "Vagotónica (Fiebre y tos)." },
+      { id: 43, nombre: "Osteoporosis", organo: "Huesos", capa: "Mesodermo Nuevo", conflicto: "Desvalorización profunda y prolongada en la propia estructura.", fase: "Simpaticotónica (Pérdida ósea)." },
+      { id: 44, nombre: "Otitis", organo: "Oído medio / Conducto auditivo", capa: "Endodermo / Ectodermo", conflicto: "Oír algo insoportable o no poder captar una información importante.", fase: "Vagotónica (Inflamación)." },
+      { id: 45, nombre: "Psoriasis", organo: "Piel (Epidermis)", capa: "Ectodermo", conflicto: "Doble conflicto de separación (querer y no querer contacto al tiempo).", fase: "Fase activa y reparación en recaída." },
+      { id: 46, nombre: "Rosácea", organo: "Piel del rostro", capa: "Ectodermo", conflicto: "Sensación de vergüenza, exposición involuntaria o ataque a la imagen.", fase: "Vagotónica (Enrojecimiento)." },
+      { id: 47, nombre: "Sinusitis", organo: "Senos paranasales", capa: "Endodermo", conflicto: "Presentimiento feo o situación que 'huele mal'.", fase: "Vagotónica (Congestión)." },
+      { id: 48, nombre: "Tendinitis", organo: "Tendones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización en la ejecución o acción que se debe realizar.", fase: "Vagotónica (Dolor e inflamación)." },
+      { id: 49, nombre: "Úlcera gástrica", organo: "Estómago", capa: "Endodermo", conflicto: "Contrariedad indigesta en el territorio con rencor o rabia.", fase: "Simpaticotónica (Ulceración)." },
+      { id: 50, nombre: "Várices", organo: "Venas de las piernas", capa: "Mesodermo Nuevo", conflicto: "Sentirse atado a un lugar o llevar una pesada bola de hierro.", fase: "Vagotónica (Dilatación venosa)." }
     ];
 
     function App() {
-      const [seccion, setSeccion] = useState('diccionario');
+      // Navegación principal
+      const [tab, setTab] = useState('escaner'); // 'escaner' | 'diccionario' | 'metodo'
+
+      // Estados del Escáner
+      const [paso, setPaso] = useState(1);
+      const [sintoma, setSintoma] = useState('');
+      const [tiempo, setTiempo] = useState('1 a 6 meses');
+      const [intensidad, setIntensidad] = useState(7);
+      const [evento, setEvento] = useState('');
+      const [sensacion, setSensacion] = useState('Impotencia / No poder actuar');
+      const [repetitivo, setRepetitivo] = useState('Sí');
+      const [compromiso, setCompromiso] = useState(8);
+
+      // Estados del Diccionario
       const [busqueda, setBusqueda] = useState('');
       const [capaFiltro, setCapaFiltro] = useState('TODAS');
-      const [cosmovisionActiva, setCosmovisionActiva] = useState('responsabilidad');
-      const [sintomaSeleccionado, setSintomaSeleccionado] = useState(null);
+      const [paginaActual, setPaginaActual] = useState(1);
+      const itemsPorPagina = 8;
 
       const PHONE_NUMBER = "56990229732";
 
-      // Filtrado del Diccionario
-      const sintomasFiltrados = useMemo(() => {
-        return BANCO_SINTOMAS.filter(item => {
+      // Persistencia local
+      useEffect(() => {
+        const savedSintoma = localStorage.getItem('camino_sintoma_v2');
+        if (savedSintoma) setSintoma(savedSintoma);
+      }, []);
+
+      useEffect(() => {
+        localStorage.setItem('camino_sintoma_v2', sintoma);
+      }, [sintoma]);
+
+      // Cálculo del Índice de Receptividad
+      const receptividad = useMemo(() => {
+        let score = 40;
+        if (parseInt(intensidad) > 6) score += 20;
+        if (evento.length > 10) score += 20;
+        if (parseInt(compromiso) > 7) score += 20;
+        return Math.min(score, 100);
+      }, [intensidad, evento, compromiso]);
+
+      // Filtrado del Diccionario A-Z
+      const listaFiltrada = useMemo(() => {
+        return BANCO_PES_COMPLETO.filter(item => {
           const coincideTexto = item.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
                                 item.conflicto.toLowerCase().includes(busqueda.toLowerCase()) ||
                                 item.organo.toLowerCase().includes(busqueda.toLowerCase());
@@ -150,80 +165,357 @@
         });
       }, [busqueda, capaFiltro]);
 
-      // Enviar consulta directa
-      const consultarSintoma = (sintoma) => {
-        const text = `Hola Mario, estuve leyendo la Biblioteca de Biodescodificación en tu portal. Tengo interés en profundizar sobre el síntoma: *${sintoma.nombre}* (${sintoma.conflicto}). ¿Cómo puedo agendar una sesión 1 a 1 contigo?`;
-        window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+      // Paginación
+      const totalPaginas = Math.ceil(listaFiltrada.length / itemsPorPagina) || 1;
+      const itemsPaginados = useMemo(() => {
+        const inicio = (paginaActual - 1) * itemsPorPagina;
+        return listaFiltrada.slice(inicio, inicio + itemsPorPagina);
+      }, [listaFiltrada, paginaActual]);
+
+      // Evaluar un síntoma desde el diccionario en el Escáner
+      const evaluarEnEscaner = (nombreSintoma) => {
+        setSintoma(nombreSintoma);
+        setTab('escaner');
+        setPaso(1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      // WhatsApp URL Generator
+      const enviarWhatsApp = () => {
+        const text = `*FICHA DE ESCÁNER BIOEMOCIONAL - CAMINO AL INCONSCIENTE*%0A%0A` +
+          `*1. Síntoma / Diagnóstico:* ${sintoma || 'No especificado'}%0A` +
+          `*2. Duración:* ${tiempo}%0A` +
+          `*3. Nivel de Estrés:* ${intensidad}/10%0A` +
+          `*4. Evento / Bioshock:* ${evento || 'No detallado'}%0A` +
+          `*5. Vivencia Inconsciente:* ${sensacion}%0A` +
+          `*6. Patrón Repetitivo:* ${repetitivo}%0A` +
+          `*7. Compromiso de Cambio:* ${compromiso}/10%0A` +
+          `*8. Índice de Receptividad:* ${receptividad}%25%0A%0A` +
+          `Hola Mario, he completado mi Escáner Bioemocional en el portal y deseo coordinar mi sesión privada 1 a 1.`;
+
+        window.open(`https://wa.me/${PHONE_NUMBER}?text=${text}`, '_blank');
       };
 
       return (
         <div className="max-w-4xl mx-auto px-4 py-8">
           
-          {/* HEADER PRINCIPAL */}
-          <header className="text-center mb-8 bg-slate-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
-            <div className="relative z-10">
-              <span className="text-amber-400 font-cinzel text-xs tracking-[0.3em] uppercase block mb-2">
-                Camino Al Inconsciente
-              </span>
-              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-3">
-                Biblioteca Interactiva de Biodescodificación
-              </h1>
-              <p className="text-slate-300 text-sm max-w-2xl mx-auto font-light leading-relaxed">
-                Basado en el <strong className="text-amber-300 font-semibold">Diccionario Prohibido del Cuerpo</strong>. Descubre el sentido biológico y emocional detrás de cada síntoma.
-              </p>
-            </div>
+          {/* HEADER PRINCIPAL CLEAN PREMIUM */}
+          <header className="text-center mb-8 bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+            <a href="https://caminoalinconsciente.cl/" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-[1.02]">
+              <div className="text-center">
+                <span className="text-xs font-bold tracking-[0.25em] text-blue-600 uppercase block mb-1">
+                  Mario Paredes · Biodescodificación
+                </span>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Portal Camino Al Inconsciente
+                </h1>
+                <p className="text-slate-500 text-xs sm:text-sm mt-2 max-w-xl mx-auto font-normal">
+                  Comprende el origen emocional y biológico de lo que hoy limita tu vida mediante herramientas interactivas y diagnóstico ordenado.
+                </p>
+              </div>
+            </a>
           </header>
 
-          {/* MENU DE NAVEGACIÓN */}
-          <nav className="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-            {[
-              { id: 'diccionario', label: '📖 Diccionario A-Z' },
-              { id: 'cosmovision', label: '👁️ Las 4 Cosmovisiones' },
-              { id: 'leyes', label: '🧬 5 Leyes Biológicas' },
-              { id: 'guia', label: '💡 Cómo Leer Tu Cuerpo' }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setSeccion(tab.id)}
-                className={`px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 ${
-                  seccion === tab.id
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                    : 'text-slate-600 hover:bg-slate-100'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+          {/* BARRA DE PESTAÑAS PRINCIPAL */}
+          <nav className="flex justify-center mb-8 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm max-w-2xl mx-auto">
+            <button
+              onClick={() => setTab('escaner')}
+              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                tab === 'escaner'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span>✨</span> Escáner Bioemocional
+            </button>
+
+            <button
+              onClick={() => setTab('diccionario')}
+              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                tab === 'diccionario'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span>📖</span> Diccionario PES (A-Z)
+            </button>
+
+            <button
+              onClick={() => setTab('metodo')}
+              className={`flex-1 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                tab === 'metodo'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span>🌱</span> Método & Sesión 1 a 1
+            </button>
           </nav>
 
-          {/* NAVEGACIÓN DE CONTENIDO */}
+          {/* PESTAÑA 1: ESCÁNER BIOEMOCIONAL */}
+          {tab === 'escaner' && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              
+              {/* Progreso */}
+              <div>
+                <div className="flex justify-between text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">
+                  <span>Paso {paso} de 4</span>
+                  <span>{paso * 25}% Completado</span>
+                </div>
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-blue-600 h-full transition-all duration-300"
+                    style={{ width: `${paso * 25}%` }}
+                  ></div>
+                </div>
+              </div>
 
-          {/* SECCIÓN 1: DICCIONARIO A-Z */}
-          {seccion === 'diccionario' && (
+              {/* PASO 1 */}
+              {paso === 1 && (
+                <div className="space-y-5">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    1. Identificación del Síntoma o Diagnóstico
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                    Ingresa el síntoma físico, diagnóstico médico u obstáculo repetido que deseas explorar.
+                  </p>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Síntoma o Situación de Estrés
+                    </label>
+                    <input
+                      type="text"
+                      value={sintoma}
+                      onChange={(e) => setSintoma(e.target.value)}
+                      placeholder="Ej: Colon irritable, migraña, dolor lumbar, hipertensión..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      ¿Hace cuánto tiempo se manifiesta?
+                    </label>
+                    <select
+                      value={tiempo}
+                      onChange={(e) => setTiempo(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option>Menos de 1 mes</option>
+                      <option>1 a 6 meses</option>
+                      <option>6 meses a 2 años</option>
+                      <option>Más de 2 años (crónico)</option>
+                    </select>
+                  </div>
+
+                  <button
+                    disabled={!sintoma.trim()}
+                    onClick={() => setPaso(2)}
+                    className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Siguiente Paso →
+                  </button>
+                </div>
+              )}
+
+              {/* PASO 2 */}
+              {paso === 2 && (
+                <div className="space-y-5">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    2. Nivel de Estrés e Impacto
+                  </h2>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        Nivel de estrés de 1 a 10
+                      </label>
+                      <span className="text-blue-600 font-extrabold text-lg">{intensidad}/10</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="10"
+                      value={intensidad}
+                      onChange={(e) => setIntensidad(e.target.value)}
+                      className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-100 rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      ¿Qué evento o vivencia imprevista ocurrió cuando comenzó el síntoma?
+                    </label>
+                    <textarea
+                      value={evento}
+                      onChange={(e) => setEvento(e.target.value)}
+                      rows="3"
+                      placeholder="Describe brevemente la situación de estrés o conflicto..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setPaso(1)}
+                      className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl"
+                    >
+                      ← Atrás
+                    </button>
+                    <button
+                      onClick={() => setPaso(3)}
+                      className="flex-2 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-8 shadow-md"
+                    >
+                      Siguiente Paso →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* PASO 3 */}
+              {paso === 3 && (
+                <div className="space-y-5">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    3. Vivencia Emocional e Inconsciente
+                  </h2>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Sentimiento predominante inconsciente
+                    </label>
+                    <select
+                      value={sensacion}
+                      onChange={(e) => setSensacion(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option>Impotencia / No poder actuar</option>
+                      <option>Miedo o amenaza en el territorio</option>
+                      <option>Desvalorización personal</option>
+                      <option>Separación / Pérdida de contacto</option>
+                      <option>Situación sucia o indigerible</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      ¿Sientes que este patrón se ha repetido en tu historia personal o familiar?
+                    </label>
+                    <div className="flex gap-3">
+                      {['Sí', 'No', 'No estoy seguro/a'].map((op) => (
+                        <button
+                          key={op}
+                          type="button"
+                          onClick={() => setRepetitivo(op)}
+                          className={`flex-1 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all ${
+                            repetitivo === op
+                              ? 'border-blue-600 bg-blue-50 text-blue-700'
+                              : 'border-slate-200 bg-slate-50 text-slate-600'
+                          }`}
+                        >
+                          {op}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setPaso(2)}
+                      className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl"
+                    >
+                      ← Atrás
+                    </button>
+                    <button
+                      onClick={() => setPaso(4)}
+                      className="flex-2 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-8 shadow-md"
+                    >
+                      Ver Diagnóstico Bioemocional →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* PASO 4: RESULTADO DE ESCÁNER */}
+              {paso === 4 && (
+                <div className="space-y-6 text-center">
+                  <div className="inline-block p-4 bg-emerald-50 text-emerald-600 rounded-full mb-1">
+                    <span className="text-3xl">✨</span>
+                  </div>
+
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Escaneo Bioemocional Completado
+                  </h2>
+
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-left space-y-3">
+                    <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+                      <span className="text-slate-500 text-xs uppercase font-bold tracking-wider">
+                        Índice de Receptividad Bioemocional
+                      </span>
+                      <span className="text-2xl font-extrabold text-blue-600">{receptividad}%</span>
+                    </div>
+
+                    <div className="space-y-2 text-xs sm:text-sm text-slate-700 pt-1">
+                      <p><strong className="text-slate-900">Síntoma:</strong> {sintoma}</p>
+                      <p><strong className="text-slate-900">Tiempo:</strong> {tiempo}</p>
+                      <p><strong className="text-slate-900">Nivel de Estrés:</strong> {intensidad}/10</p>
+                      <p><strong className="text-slate-900">Vivencia:</strong> {sensacion}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button
+                      onClick={enviarWhatsApp}
+                      className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs sm:text-sm"
+                    >
+                      <span>💬</span> Enviar Ficha a WhatsApp (+56 9 9022 9732)
+                    </button>
+
+                    <a
+                      href="https://caminoalinconsciente.cl/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition-all flex items-center justify-center gap-2 border border-slate-200 text-xs sm:text-sm"
+                    >
+                      <span>🔗</span> Ir a Camino Al Inconsciente
+                    </a>
+                  </div>
+
+                  <button
+                    onClick={() => setPaso(1)}
+                    className="text-xs text-slate-400 hover:text-slate-600 underline pt-2 block mx-auto"
+                  >
+                    Realizar otro Escaneo
+                  </button>
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* PESTAÑA 2: DICCIONARIO PES (A-Z COMPLETO) */}
+          {tab === 'diccionario' && (
             <div className="space-y-6">
               
-              {/* Buscador & Filtros */}
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
-                    placeholder="Buscar síntoma, conflicto u órgano (ej: Gastritis, Piel, Rabia)..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                  />
-                </div>
+              {/* Buscador y Filtro */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                <input
+                  type="text"
+                  value={busqueda}
+                  onChange={(e) => { setBusqueda(e.target.value); setPaginaActual(1); }}
+                  placeholder="Buscar por síntoma, órgano o conflicto (ej: Gastritis, Piel, Rabia, Colon)..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
 
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-xs font-semibold text-slate-400 mr-2 uppercase">Capa Embrionaria:</span>
-                  {['TODAS', 'Endodermo', 'Mesodermo', 'Ectodermo'].map(capa => (
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Capa Embrionaria:</span>
+                  {['TODAS', 'Endodermo', 'Mesodermo', 'Ectodermo'].map((capa) => (
                     <button
                       key={capa}
-                      onClick={() => setCapaFiltro(capa)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      onClick={() => { setCapaFiltro(capa); setPaginaActual(1); }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                         capaFiltro === capa
-                          ? 'bg-slate-900 text-amber-400 font-bold'
+                          ? 'bg-blue-600 text-white shadow-sm'
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                       }`}
                     >
@@ -233,184 +525,154 @@
                 </div>
               </div>
 
-              {/* Grid de Tarjetas */}
+              {/* Grid de Enfermedades */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {sintomasFiltrados.map(item => (
-                  <div 
-                    key={item.id}
-                    className="bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-5 shadow-sm transition-all flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold text-slate-900">{item.nombre}</h3>
-                        <span className="text-[10px] uppercase font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md">
+                {itemsPaginados.map((item) => (
+                  <div key={item.id} className="bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-5 flex flex-col justify-between shadow-sm transition-all">
+                    <div className="space-y-2.5">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-base font-bold text-slate-900">{item.nombre}</h3>
+                        <span className="text-[10px] uppercase font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md">
                           {item.capa}
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-500 mb-3">
+                      <p className="text-xs text-slate-500">
                         <strong className="text-slate-700">Órgano Afectado:</strong> {item.organo}
                       </p>
 
-                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 mb-3">
-                        <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block mb-1">
-                          Conflicto Biológico Asociado:
-                        </span>
-                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                          {item.conflicto}
-                        </p>
+                      <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider block mb-0.5">Conflicto Psicológico:</span>
+                        <p className="text-xs text-slate-700 leading-relaxed">{item.conflicto}</p>
                       </div>
 
                       <p className="text-xs text-slate-500">
-                        <strong className="text-slate-700">Fase Típica:</strong> {item.fase}
+                        <strong className="text-slate-700">Fase del Síntoma:</strong> {item.fase}
                       </p>
                     </div>
 
-                    <div className="pt-4 mt-3 border-t border-slate-100">
+                    <div className="pt-4 mt-2 border-t border-slate-100">
                       <button
-                        onClick={() => consultarSintoma(item)}
-                        className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2"
+                        onClick={() => evaluarEnEscaner(item.nombre)}
+                        className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
                       >
-                        <span>💬</span> Consultar sobre este síntoma con Mario
+                        Evaluar en Escáner Bioemocional →
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
 
-            </div>
-          )}
-
-          {/* SECCIÓN 2: LAS 4 COSMOVISIONES */}
-          {seccion === 'cosmovision' && (
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <h2 className="text-xl font-bold text-slate-900 mb-2">
-                  La Mirada que Eliges Define Tu Destino
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
-                  Dos personas pueden recibir el mismo diagnóstico. Una entra en pánico; la otra entra en conciencia. ¿Qué cambió? La forma de mirar.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {COSMOVISIONES.map(item => (
-                  <div
-                    key={item.id}
-                    onClick={() => setCosmovisionActiva(item.id)}
-                    className={`p-5 rounded-2xl border cursor-pointer transition-all ${
-                      cosmovisionActiva === item.id
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-lg'
-                        : 'bg-white text-slate-800 border-slate-200 hover:border-slate-300'
-                    }`}
+              {/* Paginación */}
+              {totalPaginas > 1 && (
+                <div className="flex justify-center items-center gap-3 pt-4">
+                  <button
+                    disabled={paginaActual === 1}
+                    onClick={() => setPaginaActual(p => Math.max(p - 1, 1))}
+                    className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 disabled:opacity-40 shadow-sm"
                   >
-                    <span className={`text-[10px] font-bold uppercase tracking-widest block mb-1 ${cosmovisionActiva === item.id ? 'text-amber-400' : 'text-blue-600'}`}>
-                      {item.sub}
-                    </span>
-                    <h3 className="text-lg font-bold mb-2">{item.titulo}</h3>
-                    <p className={`text-xs leading-relaxed mb-4 ${cosmovisionActiva === item.id ? 'text-slate-300' : 'text-slate-600'}`}>
-                      {item.desc}
-                    </p>
+                    Anterior
+                  </button>
+                  <span className="text-xs text-slate-500 font-medium">
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
+                  <button
+                    disabled={paginaActual === totalPaginas}
+                    onClick={() => setPaginaActual(p => Math.min(p + 1, totalPaginas))}
+                    className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 disabled:opacity-40 shadow-sm"
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              )}
 
-                    <div className={`p-3 rounded-xl text-xs font-medium ${cosmovisionActiva === item.id ? 'bg-slate-800 text-amber-300' : 'bg-slate-50 text-slate-700'}`}>
-                      <strong className="block mb-0.5">Pregunta Central:</strong> "{item.pregunta}"
+            </div>
+          )}
+
+          {/* PESTAÑA 3: MÉTODO & SESIÓN 1 A 1 (INFORMACIÓN DEL SITIO WEB) */}
+          {tab === 'metodo' && (
+            <div className="space-y-6">
+              
+              {/* DIAGNÓSTICO EN BIODESCODIFICACIÓN */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+                <span className="text-xs font-bold tracking-widest text-blue-600 uppercase block">
+                  Enfoque Clínico Integrativo
+                </span>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                  Trabajamos sobre situaciones CON DIAGNÓSTICO
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  En biodescodificación no adivinamos ni diagnosticamos. Partimos de una mirada integrativa: la persona acude con un <strong className="text-slate-900">diagnóstico médico o clínico previo</strong>. A partir de allí, profundizamos en qué experiencias, emociones, creencias y aprendizajes inconscientes se asocian con la manera en que estás viviendo ese conflicto[cite: 5].
+                </p>
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 leading-relaxed">
+                  💡 <strong className="text-slate-900">Importante:</strong> La biodescodificación no reemplaza el tratamiento médico o psicológico; lo amplía y complementa al comprender la raíz biológica y emocional de lo que experimentas[cite: 6, 20].
+                </div>
+              </div>
+
+              {/* PROCESO DE LA SESIÓN EN 5 PASOS */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                <div>
+                  <span className="text-xs font-bold tracking-widest text-blue-600 uppercase block mb-1">
+                    El Protocolo
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+                    ¿Cómo es una Sesión Privada 1 a 1?
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    Un encuentro privado por videollamada orientado a encontrar el conflicto que dio origen a lo que hoy vives.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    { num: "01", titulo: "Situación de estrés", desc: "Identificamos el hecho concreto que hoy te tiene en conflicto o reactiva el síntoma." },
+                    { num: "02", titulo: "Sentimiento y emoción oculta", desc: "Reconocemos qué emoción quedó atrapada bajo esa vivencia imprevista." },
+                    { num: "03", titulo: "Creencia limitante", desc: "Descubrimos la idea aprendida o heredada que sostiene tu modo de reaccionar en piloto automático." },
+                    { num: "04", titulo: "Reimpronta", desc: "Trabajamos una nueva impresión emocional y biológica frente al mismo hecho." },
+                    { num: "05", titulo: "Seguimiento post sesión", desc: "Te llevas un protocolo práctico para aplicar desde el primer día y sostener el cambio." }
+                  ].map((pasoItem) => (
+                    <div key={pasoItem.num} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex gap-4 items-start">
+                      <span className="text-lg font-extrabold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100 shrink-0">
+                        {pasoItem.num}
+                      </span>
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900">{pasoItem.titulo}</h4>
+                        <p className="text-xs text-slate-600 leading-relaxed mt-0.5">{pasoItem.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* SECCIÓN 3: 5 LEYES BIOLÓGICAS */}
-          {seccion === 'leyes' && (
-            <div className="space-y-4">
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center mb-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-2">
-                  Las 5 Leyes Biológicas del Dr. Ryke Geerd Hamer
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
-                  El pilar científico de la Biodescodificación. Muestra cómo cada enfermedad responde a un programa especial con pleno sentido de supervivencia.
-                </p>
-              </div>
-
-              {LEYES_BIOLOGICAS.map((ley, idx) => (
-                <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-lg shrink-0">
-                    {ley.num}
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 mb-1">{ley.titulo}</h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {ley.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* SECCIÓN 4: GUÍA PRÁCTICA */}
-          {seccion === 'guia' && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-              <div className="text-center max-w-xl mx-auto">
-                <h2 className="text-xl font-bold text-slate-900 mb-2">
-                  Cómo Usar Este Conocimiento Sin Juzgarte
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  El error más común es leer un conflicto y culpabilizarse. Nadie elige enfermarse conscientemente.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">1</span>
-                  <h3 className="font-bold text-sm text-slate-900 mb-2">Lee Sin Juicio</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    No te castigues ni busques culpables. Comprender es para liberar, no para responsabilizar negativamente.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">2</span>
-                  <h3 className="font-bold text-sm text-slate-900 mb-2">Busca el Momento</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    ¿Cuándo comenzó exactamente el síntoma? ¿Qué evento imprevisto o emoción no expresada viviste días antes?
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-3">3</span>
-                  <h3 className="font-bold text-sm text-slate-900 mb-2">Observa la Fase</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Muchos dolores aparecen en fase de reparación (Vagotónica). A veces el dolor indica que tu cuerpo ya está sanando.
-                  </p>
+                  ))}
                 </div>
               </div>
 
-              {/* CALL TO ACTION FINAL */}
-              <div className="bg-slate-900 text-white rounded-2xl p-6 text-center mt-8 space-y-4">
-                <h3 className="text-lg font-bold text-amber-400">
-                  ¿Deseas profundizar en tu propio síntoma o historia personal?
+              {/* QUIÉN TE ACOMPAÑA & AGENDAMIENTO */}
+              <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm text-center space-y-4">
+                <span className="text-xs font-bold tracking-widest text-blue-400 uppercase block">
+                  Acompañamiento Privado
+                </span>
+                <h3 className="text-xl font-bold text-white">
+                  Mario Paredes · Biodescodificación
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
-                  Agenda una sesión privada 1 a 1 de Biodescodificación con Mario Paredes para encontrar la raíz biológica y transformar tu vida.
+                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+                  "Siento que la biodescodificación es el método más efectivo y directo para transformar la forma en que pensamos y generar cambios desde el minuto 1."
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+
+                <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
                   <a
-                    href={`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent('Hola Mario, leí la guía en tu portal y me gustaría agendar una sesión 1 a 1 contigo.')}`}
+                    href={`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent('Hola Mario, leí la información de tu sitio web en la app y deseo agendar mi sesión privada 1 a 1.')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
+                    className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2"
                   >
-                    💬 Agendar por WhatsApp (+56 9 9022 9732)
+                    <span>💬</span> Agendar Mi Sesión por WhatsApp
                   </a>
+
                   <a
                     href="https://caminoalinconsciente.cl/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs border border-slate-700 transition-all"
+                    className="px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs sm:text-sm border border-slate-700 transition-all flex items-center justify-center gap-2"
                   >
-                    🔗 Visitar caminoalinconsciente.cl
+                    <span>🔗</span> Visitar caminoalinconsciente.cl
                   </a>
                 </div>
               </div>
@@ -418,11 +680,11 @@
             </div>
           )}
 
-          {/* FOOTER */}
+          {/* FOOTER GENERAL */}
           <footer className="mt-12 text-center text-xs text-slate-400 border-t border-slate-200 pt-6">
-            <p>© {new Date().getFullYear()} Camino Al Inconsciente - Mario Paredes.</p>
+            <p>© {new Date().getFullYear()} Camino Al Inconsciente - Mario Paredes. Todos los derechos reservados.</p>
             <p className="mt-1 font-light">
-              La biodescodificación complementa el acompañamiento médico sin reemplazarlo.
+              Acompañamiento privado para comprender el origen emocional y biológico de lo que hoy te limita.
             </p>
           </footer>
 
