@@ -163,7 +163,7 @@
       { id: 21, nombre: "Anorexia", organo: "Hipotálamo / sistema digestivo", capa: "Ectodermo / Endodermo", conflicto: "Deseo de control, rechazo materno o del crecimiento.", fase: "Simpaticotónica (falta de apetito, hipervigilancia)." },
       { id: 22, nombre: "Apendicitis", organo: "Apéndice (intestino grueso)", capa: "Endodermo", conflicto: "No poder evacuar una situación sucia o repugnante.", fase: "Vagotónica (inflamación aguda en reparación)." },
       { id: 23, nombre: "Aplasia medular", organo: "Médula ósea", capa: "Mesodermo Nuevo", conflicto: "Desvalorización total y existencial, pérdida del sentido de la vida.", fase: "Simpaticotónica (inhibición celular profunda)." },
-      { id: 24, nombre: "Arritmia", organo: "Nódulo sinusal / miocardio", capa: "Mesodermo Nuevo / Ectodermo", conflicto: "Miedo en el territorio, susto inesperado, conflicto existencial.", fase: "Simpaticotónica (alteración del ritmo cardíaco)." },
+      { id: 24, nombre: "Arritmia", organo: "Nódulo sinusal / corazón", capa: "Mesodermo Nuevo / Ectodermo", conflicto: "Miedo en el territorio, susto inesperado, conflicto existencial.", fase: "Simpaticotónica (alteración del ritmo cardíaco)." },
       { id: 25, nombre: "Artritis", organo: "Articulaciones", capa: "Mesodermo Nuevo", conflicto: "Desvalorización por falta de rendimiento o conflicto con el movimiento.", fase: "Vagotónica (inflamación aguda en reparación)." },
       { id: 26, nombre: "Artrosis", organo: "Cartílago y hueso articular", capa: "Mesodermo Nuevo", conflicto: "Desvalorización crónica respecto a la movilidad o función articular.", fase: "Vagotónica (reconstrucción lenta con rigidez)." },
       { id: 27, nombre: "Asma", organo: "Bronquios", capa: "Ectodermo", conflicto: "Miedo en el territorio, opresión, falta de espacio.", fase: "Vagotónica (broncoespasmos y dificultad para respirar)." },
@@ -709,46 +709,41 @@
         titulo: "La Ley de Hierro de la Biología",
         subtitulo: "El Origen: El Impacto Emocional (Bioshock)",
         enunciado: "Todo Programa Biológico Especial (DHS) se activa a partir de un choque emocional imprevisto, vivido en aislamiento y sin solución inmediata.",
+        aplicacion: "En consulta no buscamos el estrés diario común, sino el instante exacto del 'Bioshock'. Identificar ese momento imprevisto nos permite desarmar la carga emocional que el sistema nervioso dejó atrapada en el cuerpo."
       },
       {
         numero: "2ª LEY",
         titulo: "Carácter Bifásico de los Programas Biológicos",
         subtitulo: "Fase Activa (Simpaticotonía) y Fase de Reparación (Vagotónica)",
         enunciado: "Todo proceso biológico consta de dos fases: una activa de estrés y una de solución o reparación (siempre que el conflicto se resuelva).",
+        aplicacion: "Le permite al consultante entender en qué fase está su síntoma. Muchos dolores, inflamaciones o infecciones no son la 'enfermedad empeorando', sino la fase de reparación de su cuerpo. Esto elimina el pánico al diagnóstico."
       },
       {
         numero: "3ª LEY",
         titulo: "Sistema Ontogenético de los Programas Biológicos",
         subtitulo: "Capas Embrionarias y Lógica Cerebro-Órgano",
         enunciado: "Cada tejido del cuerpo responde según su capa embrionaria de origen (Endodermo, Mesodermo o Ectodermo) regulada por un área del cerebro.",
+        aplicacion: "Nos da la precisión para saber el tipo de vivencia exacta. El Endodermo responde a supervivencia o 'bocados indigeribles', el Mesodermo a desvalorización estructural y el Ectodermo a separación o invasión del territorio."
       },
       {
         numero: "4ª LEY",
         titulo: "Sistema Ontogenético de los Microbios",
         subtitulo: "Microbios como Aliados de la Reparación",
         enunciado: "Los microorganismos (bacterias, hongos, virus) no destruyen al cuerpo; actúan como limpiadores y restauradores en la fase de reparación.",
+        aplicacion: "Transforma la mirada del consultante: deja de ver al síntoma o la infección como una invasión enemiga y comprende el trabajo biológico de limpieza que está haciendo su propio organismo."
       },
       {
         numero: "5ª LEY",
         titulo: "La Quintaesencia (Comprensión Biológica)",
         subtitulo: "El Sentido Biológico Adaptativo del Síntoma",
         enunciado: "Toda 'enfermedad' es en realidad un Programa Biológico Especial creado por la naturaleza para ayudar al organismo a sobrevivir a una crisis.",
+        aplicacion: "Es la clave fundamental de Camino Al Inconsciente: entender que el cuerpo NUNCA se equivoca. El síntoma es la mejor respuesta biológica que tu inconsciente encontró ante una emoción que no pudiste gestionar en su momento."
       }
     ];
 
     function App() {
-      // PESTAÑAS: 'leyes' -> 'diccionario' -> 'escaner'
+      // PESTAÑAS: 'leyes' -> 'diccionario'
       const [tab, setTab] = useState('leyes');
-
-      // Estado del Escáner
-      const [paso, setPaso] = useState(1);
-      const [sintoma, setSintoma] = useState('');
-      const [tiempo, setTiempo] = useState('1 a 6 meses');
-      const [intensidad, setIntensidad] = useState(7);
-      const [evento, setEvento] = useState('');
-      const [sensacion, setSensacion] = useState('Impotencia / No poder actuar');
-      const [repetitivo, setRepetitivo] = useState('Sí');
-      const [compromiso, setCompromiso] = useState(8);
 
       // Estado del Diccionario
       const [busqueda, setBusqueda] = useState('');
@@ -756,26 +751,12 @@
       const [paginaActual, setPaginaActual] = useState(1);
       const itemsPorPagina = 10;
 
-      const PHONE_NUMBER = "56990229732";
       const WEBSITE_URL = "https://caminoalinconsciente.cl/";
 
-      // Persistencia en LocalStorage
-      useEffect(() => {
-        const savedSintoma = localStorage.getItem('camino_sintoma');
-        if (savedSintoma) setSintoma(savedSintoma);
-      }, []);
-
-      useEffect(() => {
-        localStorage.setItem('camino_sintoma', sintoma);
-      }, [sintoma]);
-
-      const receptividad = useMemo(() => {
-        let score = 40;
-        if (parseInt(intensidad) > 6) score += 20;
-        if (evento.length > 10) score += 20;
-        if (parseInt(compromiso) > 7) score += 20;
-        return Math.min(score, 100);
-      }, [intensidad, evento, compromiso]);
+      // Contacto directo por WhatsApp (mismo número del escáner)
+      const PHONE_NUMBER = "56990229732";
+      const WHATSAPP_MSG = "Hola Mario, he estado revisando el portal de biodescodificación y quisiera coordinar una consulta privada 1 a 1.";
+      const WHATSAPP_URL = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
 
       // Filtro del Diccionario A-Z
       const listaFiltrada = useMemo(() => {
@@ -796,28 +777,6 @@
         return listaFiltrada.slice(inicio, inicio + itemsPorPagina);
       }, [listaFiltrada, paginaActual]);
 
-      const evaluarEnEscaner = (nombreSintoma) => {
-        setSintoma(nombreSintoma);
-        setTab('escaner');
-        setPaso(1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
-
-      const enviarWhatsApp = () => {
-        const text = `*FICHA DE ESCÁNER BIOEMOCIONAL - CAMINO AL INCONSCIENTE*%0A%0A` +
-          `*1. Síntoma / Conflicto:* ${sintoma || 'No especificado'}%0A` +
-          `*2. Duración:* ${tiempo}%0A` +
-          `*3. Nivel de Estrés:* ${intensidad}/10%0A` +
-          `*4. Evento / Bioshock:* ${evento || 'No detallado'}%0A` +
-          `*5. Sentimiento Predominante:* ${sensacion}%0A` +
-          `*6. Patrón Repetitivo:* ${repetitivo}%0A` +
-          `*7. Compromiso de Cambio:* ${compromiso}/10%0A` +
-          `*8. Índice de Receptividad:* ${receptividad}%25%0A%0A` +
-          `Hola Mario, he completado mi Escáner Bioemocional en el portal y deseo coordinar mi sesión privada 1 a 1.`;
-        
-        window.open(`https://wa.me/${PHONE_NUMBER}?text=${text}`, '_blank');
-      };
-
       return (
         <div className="max-w-4xl mx-auto px-4 py-8">
           
@@ -828,11 +787,19 @@
             </a>
           </header>
 
-          {/* Navegación Principal con el nuevo Botón al Sitio Web al FINAL */}
-          <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-2xl mx-auto shadow-lg gap-1">
+          {/* Navegación Principal: PRIMERO el botón hacia el Sitio Web con la pregunta solicitada */}
+          <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-3xl mx-auto shadow-lg gap-1.5">
+            <a
+              href={WEBSITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 min-w-[170px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 border border-slate-700 shadow-md font-bold text-center"
+            >
+              <span>❓</span> ¿Qué es la biodescodificación?
+            </a>
             <button
               onClick={() => setTab('leyes')}
-              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[110px] sm:min-w-[120px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'leyes'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -842,7 +809,7 @@
             </button>
             <button
               onClick={() => setTab('diccionario')}
-              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-w-[110px] sm:min-w-[120px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 tab === 'diccionario'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -850,23 +817,13 @@
             >
               <span>📖</span> Diccionario
             </button>
-            <button
-              onClick={() => setTab('escaner')}
-              className={`flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                tab === 'escaner'
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <span>✨</span> Escáner
-            </button>
             <a
-              href={WEBSITE_URL}
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 min-w-[110px] sm:min-w-[130px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 border border-slate-700/80 shadow-md"
+              className="flex-1 min-w-[140px] sm:min-w-[150px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 border border-emerald-400 shadow-md shadow-emerald-500/20 font-bold text-center"
             >
-              <span>🌐</span> Sitio Web
+              <span>💬</span> Consulta con Mario
             </a>
           </div>
 
@@ -910,22 +867,6 @@
                 ))}
               </div>
 
-              <div className="bg-slate-950 border border-amber-500/30 rounded-2xl p-6 sm:p-8 text-center space-y-4 shadow-xl">
-                <h3 className="text-xl font-cinzel font-bold text-amber-400">
-                  Comprender la Lógica de Tu Cuerpo es el Primer Paso para Sanar
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-                  Al entender la Ley Biológica que sostiene tu síntoma, el miedo al diagnóstico desaparece y puedes iniciar un proceso profundo de transformación.
-                </p>
-                <div className="pt-2">
-                  <button
-                    onClick={() => setTab('escaner')}
-                    className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-all"
-                  >
-                    Escanear Mi Síntoma Ahora →
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 
@@ -997,14 +938,6 @@
                         </p>
                       </div>
 
-                      <div className="pt-4 mt-2 border-t border-slate-800/80">
-                        <button
-                          onClick={() => evaluarEnEscaner(item.nombre)}
-                          className="w-full py-2.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2"
-                        >
-                          Evaluar en Escáner Bioemocional →
-                        </button>
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -1034,239 +967,6 @@
                     className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold disabled:opacity-40 hover:border-amber-500/50"
                   >
                     Siguiente
-                  </button>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {/* PESTAÑA 3: ESCÁNER BIOEMOCIONAL */}
-          {tab === 'escaner' && (
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
-              
-              <div className="mb-8">
-                <div className="flex justify-between text-xs font-semibold text-amber-400/80 uppercase tracking-widest mb-2">
-                  <span>Paso {paso} de 4</span>
-                  <span>{paso * 25}% Completado</span>
-                </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-amber-500 to-yellow-300 h-full transition-all duration-500 ease-out"
-                    style={{ width: `${paso * 25}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {paso === 1 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                    <span className="text-amber-400">1.</span> Identificación del Síntoma o Conflicto
-                  </h2>
-                  <p className="text-sm text-slate-400">
-                    Escribe el síntoma físico, molestia u obstáculo emocional que deseas comprender.
-                  </p>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-                      Síntoma o Situación de Estrés
-                    </label>
-                    <input
-                      type="text"
-                      value={sintoma}
-                      onChange={(e) => setSintoma(e.target.value)}
-                      placeholder="Ej: Colon irritable, migraña, dificultad económica..."
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-slate-100 focus:outline-none focus:border-amber-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-                      ¿Hace cuánto tiempo se manifiesta?
-                    </label>
-                    <select
-                      value={tiempo}
-                      onChange={(e) => setTiempo(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-slate-100 focus:outline-none focus:border-amber-500"
-                    >
-                      <option>Menos de 1 mes</option>
-                      <option>1 a 6 meses</option>
-                      <option>6 meses a 2 años</option>
-                      <option>Más de 2 años (crónico)</option>
-                    </select>
-                  </div>
-
-                  <button
-                    disabled={!sintoma.trim()}
-                    onClick={() => setPaso(2)}
-                    className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Siguiente Paso →
-                  </button>
-                </div>
-              )}
-
-              {paso === 2 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                    <span className="text-amber-400">2.</span> Intensidad del Estrés e Impacto
-                  </h2>
-                  
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-xs font-medium text-slate-300 uppercase tracking-wider">
-                        Nivel de estrés de 1 a 10
-                      </label>
-                      <span className="text-amber-400 font-bold text-lg">{intensidad}/10</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="1"
-                      max="10"
-                      value={intensidad}
-                      onChange={(e) => setIntensidad(e.target.value)}
-                      className="w-full accent-amber-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-                      ¿Qué ocurrió cuando comenzó o empeoró el síntoma? (Bioshock)
-                    </label>
-                    <textarea
-                      value={evento}
-                      onChange={(e) => setEvento(e.target.value)}
-                      rows="3"
-                      placeholder="Describe brevemente el evento imprevisto o la emoción no expresada..."
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-amber-500"
-                    ></textarea>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setPaso(1)}
-                      className="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl"
-                    >
-                      ← Atrás
-                    </button>
-                    <button
-                      onClick={() => setPaso(3)}
-                      className="flex-2 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl px-8"
-                    >
-                      Siguiente Paso →
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {paso === 3 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                    <span className="text-amber-400">3.</span> Vivencia Emocional e Inconsciente
-                  </h2>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-                      Sentimiento predominante inconsciente
-                    </label>
-                    <select
-                      value={sensacion}
-                      onChange={(e) => setSensacion(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-slate-100 focus:outline-none focus:border-amber-500"
-                    >
-                      <option>Impotencia / No poder actuar</option>
-                      <option>Miedo o amenaza en el territorio</option>
-                      <option>Desvalorización personal</option>
-                      <option>Separación / Pérdida de contacto</option>
-                      <option>Situación sucia o indigerible</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
-                      ¿Sientes que este patrón se ha repetido en tu historia personal o familiar?
-                    </label>
-                    <div className="flex gap-4">
-                      {['Sí', 'No', 'No estoy seguro/a'].map((op) => (
-                        <button
-                          key={op}
-                          type="button"
-                          onClick={() => setRepetitivo(op)}
-                          className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition-all ${
-                            repetitivo === op
-                              ? 'border-amber-500 bg-amber-500/10 text-amber-400'
-                              : 'border-slate-800 bg-slate-950 text-slate-400'
-                          }`}
-                        >
-                          {op}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setPaso(2)}
-                      className="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl"
-                    >
-                      ← Atrás
-                    </button>
-                    <button
-                      onClick={() => setPaso(4)}
-                      className="flex-2 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl px-8"
-                    >
-                      Ver Diagnóstico Bioemocional →
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {paso === 4 && (
-                <div className="space-y-6 text-center">
-                  <div className="inline-block p-4 bg-amber-500/10 rounded-full text-amber-400 mb-2">
-                    <span className="text-4xl">✨</span>
-                  </div>
-
-                  <h2 className="text-2xl font-cinzel font-bold text-amber-400">
-                    Escaneo Bioemocional Completado
-                  </h2>
-
-                  <div className="bg-slate-950 border border-amber-500/30 rounded-2xl p-6 text-left space-y-4">
-                    <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-                      <span className="text-slate-400 text-sm">Índice de Receptividad Bioemocional</span>
-                      <span className="text-2xl font-bold text-amber-400">{receptividad}%</span>
-                    </div>
-
-                    <div className="space-y-2 text-sm text-slate-300">
-                      <p><strong className="text-slate-100">Síntoma:</strong> {sintoma}</p>
-                      <p><strong className="text-slate-100">Tiempo:</strong> {tiempo}</p>
-                      <p><strong className="text-slate-100">Nivel de Estrés:</strong> {intensidad}/10</p>
-                      <p><strong className="text-slate-100">Vivencia:</strong> {sensacion}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <button
-                      onClick={enviarWhatsApp}
-                      className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
-                    >
-                      <span>💬</span> Enviar Ficha por WhatsApp
-                    </button>
-
-                    <a
-                      href={WEBSITE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 border border-slate-700"
-                    >
-                      <span>🌐</span> Ir a Camino Al Inconsciente
-                    </a>
-                  </div>
-
-                  <button
-                    onClick={() => setPaso(1)}
-                    className="text-xs text-slate-500 hover:text-slate-400 underline pt-4 block mx-auto"
-                  >
-                    Realizar otro Escaneo
                   </button>
                 </div>
               )}
