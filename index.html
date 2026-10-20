@@ -748,6 +748,7 @@
       // Estado del Diccionario
       const [busqueda, setBusqueda] = useState('');
       const [capaFiltro, setCapaFiltro] = useState('TODAS');
+      const [letraFiltro, setLetraFiltro] = useState('TODAS');
       const [paginaActual, setPaginaActual] = useState(1);
       const itemsPorPagina = 10;
 
@@ -758,8 +759,11 @@
       const WHATSAPP_MSG = "Hola Mario, he estado revisando el portal de biodescodificación y tengo una consulta....";
       const WHATSAPP_URL = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
 
-      // Filtro del Diccionario A-Z
-      const listaFiltrada = useMemo(() => {
+      // Normaliza el nombre (sin acentos) para comparar la letra inicial
+      const quitarAcentos = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+
+      // Filtro del Diccionario: texto + capa -> listaBase; letra inicial -> listaFiltrada
+      const listaBase = useMemo(() => {
         return BANCO_PES.filter(item => {
           const coincideTexto = item.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
                                 item.conflicto.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -770,6 +774,17 @@
           return coincideTexto && coincideCapa;
         });
       }, [busqueda, capaFiltro]);
+
+      // Letras A-Z que tienen al menos una enfermedad en la lista actual
+      const letrasDisponibles = useMemo(() => {
+        const letras = new Set(listaBase.map(item => quitarAcentos(item.nombre).charAt(0)));
+        return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(letra => letras.has(letra));
+      }, [listaBase]);
+
+      const listaFiltrada = useMemo(() => {
+        if (letraFiltro === 'TODAS') return listaBase;
+        return listaBase.filter(item => quitarAcentos(item.nombre).charAt(0) === letraFiltro);
+      }, [listaBase, letraFiltro]);
 
       const totalPaginas = Math.ceil(listaFiltrada.length / itemsPorPagina) || 1;
       const itemsPaginados = useMemo(() => {
@@ -901,16 +916,6 @@
           {/* PESTAÑA 1: LAS 5 LEYES BIOLÓGICAS */}
           {tab === 'leyes' && (
             <div className="space-y-6">
-              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
-                <span className="text-xs font-bold tracking-widest text-amber-400/90 uppercase block">
-                  Fundamento Científico y Biológico
-                </span>
-                <h2 className="text-2xl font-cinzel font-bold text-amber-400">
-                  ¿Cómo Usamos las 5 Leyes Biológicas en Biodescodificación?
-                </h2>
-
-              </div>
-
               <div className="space-y-4">
                 {LEYES_BIOLOGICAS_DATOS.map((ley, idx) => (
                   <div key={idx} className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 rounded-2xl p-6 space-y-3 transition-all">
@@ -974,6 +979,37 @@
                       {capa}
                     </button>
                   ))}
+                </div>
+
+                <div className="pt-3 border-t border-slate-800">
+                  <div className="flex flex-wrap items-center gap-1">
+                    <button
+                      onClick={() => { setLetraFiltro('TODAS'); setPaginaActual(1); }}
+                      className={`px-2.5 py-1.5 rounded-md text-[11px] font-bold tracking-wide transition-all ${
+                        letraFiltro === 'TODAS'
+                          ? 'bg-amber-500 text-slate-950'
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      }`}
+                    >
+                      Todas las letras
+                    </button>
+                    {letrasDisponibles.map((letra) => (
+                      <button
+                        key={letra}
+                        onClick={() => { setLetraFiltro(letra); setPaginaActual(1); }}
+                        className={`w-7 h-7 rounded-md text-xs font-bold transition-all ${
+                          letraFiltro === letra
+                            ? 'bg-amber-500 text-slate-950'
+                            : 'bg-slate-800 text-slate-300 hover:bg-amber-500/30 hover:text-amber-300'
+                        }`}
+                      >
+                        {letra}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-2">
+                    Accede por la letra inicial de la enfermedad · {letrasDisponibles.length} letras con resultados
+                  </p>
                 </div>
               </div>
 
