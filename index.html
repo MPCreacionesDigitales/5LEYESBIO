@@ -742,7 +742,7 @@
     ];
 
     function App() {
-      // PESTAÑAS: 'leyes' -> 'diccionario'
+      // PESTAÑAS: 'quees' -> 'leyes' -> 'diccionario'
       const [tab, setTab] = useState('leyes');
 
       // Estado del Diccionario
@@ -787,16 +787,18 @@
             </a>
           </header>
 
-          {/* Navegación Principal: PRIMERO el botón hacia el Sitio Web con la pregunta solicitada */}
+          {/* Navegación Principal: Pestañas + WhatsApp + enlace al sitio web (último botón) */}
           <div className="flex flex-wrap justify-center mb-8 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 max-w-3xl mx-auto shadow-lg gap-1.5">
-            <a
-              href={WEBSITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 min-w-[170px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 border border-slate-700 shadow-md font-bold text-center"
+            <button
+              onClick={() => setTab('quees')}
+              className={`flex-1 min-w-[170px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
+                tab === 'quees'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
               <span>❓</span> ¿Qué es la biodescodificación?
-            </a>
+            </button>
             <button
               onClick={() => setTab('leyes')}
               className={`flex-1 min-w-[110px] sm:min-w-[120px] py-3 px-2 sm:px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 ${
@@ -825,7 +827,76 @@
             >
               <span>💬</span> Consulta con Mario
             </a>
+            <a
+              href={WEBSITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 min-w-[180px] py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 border border-slate-700 shadow-md font-bold text-center"
+            >
+              <span>🌐</span> Quiero visitar CAMINO AL INCONSCIENTE
+            </a>
           </div>
+
+          {/* PESTAÑA: ¿QUÉ ES LA BIODESCODIFICACIÓN? */}
+          {tab === 'quees' && (
+            <div className="space-y-6">
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
+                <span className="text-xs font-bold tracking-widest text-amber-400/90 uppercase block">
+                  Comprender el síntoma desde una nueva perspectiva
+                </span>
+                <h2 className="text-2xl font-cinzel font-bold text-amber-400">
+                  ¿Qué es la Biodescodificación?
+                </h2>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Cada síntoma, diagnóstico o experiencia personal puede explorarse desde la biodescodificación, relacionando la vivencia de la persona con sus emociones, su historia y la manera en que ha experimentado determinadas situaciones.
+                </p>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  A través de este enfoque, trabajamos con el síntoma o diagnóstico que la persona desea comprender, explorando su contexto, los acontecimientos significativos de su historia y los conflictos emocionales que podrían estar relacionados con su experiencia.
+                </p>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  El proceso integra la exploración de las vivencias personales, la identificación de patrones emocionales y creencias, y el estudio del órgano o tejido implicado desde el marco de las 5 Leyes Biológicas.
+                </p>
+              </div>
+
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
+                <h3 className="text-xl font-cinzel font-bold text-amber-400">
+                  ¿Cómo se aplica la biodescodificación?
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  El trabajo se desarrolla a partir de los casos, síntomas, diagnósticos o situaciones que cada persona presenta. Mediante una exploración ordenada, se busca comprender los distintos elementos que forman parte de su experiencia. Durante el proceso se trabaja en:
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { t: "Exploración del caso", d: "Conocer el síntoma o diagnóstico, su contexto y los antecedentes relevantes de la persona." },
+                    { t: "Identificación de vivencias significativas", d: "Explorar acontecimientos, relaciones y experiencias emocionales que puedan tener relevancia para la persona." },
+                    { t: "Análisis emocional", d: "Reconocer emociones, patrones de comportamiento y creencias que influyen en su manera de interpretar y afrontar determinadas situaciones." },
+                    { t: "Estudio desde las 5 Leyes Biológicas", d: "Revisar, dentro de este modelo, el órgano o tejido implicado, la capa embrionaria, las fases descritas y el sentido biológico propuesto para el caso." },
+                    { t: "Integración y toma de conciencia", d: "Relacionar los elementos explorados para favorecer una mayor comprensión de la propia historia y de las formas de afrontar los conflictos personales." }
+                  ].map((paso, i) => (
+                    <div key={i} className="bg-slate-950/70 border border-slate-800/60 rounded-xl p-4">
+                      <p className="text-sm font-bold text-amber-300">{paso.t}</p>
+                      <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">{paso.d}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm space-y-4">
+                <h3 className="text-xl font-cinzel font-bold text-amber-400">
+                  Un espacio de exploración y aprendizaje
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Este proceso está dirigido a personas que desean profundizar en la comprensión de sus experiencias, así como a terapeutas, acompañantes y estudiantes interesados en conocer la aplicación de la biodescodificación al análisis de casos.
+                </p>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  El objetivo es ofrecer una metodología de exploración que permita abordar cada caso con estructura, profundidad y atención a sus particularidades, facilitando la identificación de patrones emocionales y nuevas perspectivas para afrontar la vida cotidiana.
+                </p>
+                <p className="text-xs text-slate-400 italic leading-relaxed border-t border-slate-800 pt-3">
+                  La biodescodificación se plantea como un enfoque complementario de exploración personal y no sustituye el diagnóstico, el tratamiento ni el seguimiento de los profesionales de la salud.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* PESTAÑA 1: LAS 5 LEYES BIOLÓGICAS */}
           {tab === 'leyes' && (
@@ -837,9 +908,7 @@
                 <h2 className="text-2xl font-cinzel font-bold text-amber-400">
                   ¿Cómo Usamos las 5 Leyes Biológicas en Biodescodificación?
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Las 5 Leyes Biológicas demuestran que lo que llamamos "enfermedad" no es un error de la naturaleza ni una falla azarosa de tu cuerpo, sino un <strong className="text-amber-300">Programa Biológico Especial con Pleno Sentido Adaptativo</strong>. En nuestras sesiones privadas aplicamos estas leyes para descifrar el mensaje inconsciente de tu biología.
-                </p>
+
               </div>
 
               <div className="space-y-4">
